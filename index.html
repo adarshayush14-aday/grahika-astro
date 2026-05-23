@@ -1542,7 +1542,7 @@ async function sendMessage(){
   chatHistory.push({role:'user',content:text});
   const loadingId=addLoading();
   try{
-    const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev'
+    const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
