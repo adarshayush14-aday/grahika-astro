@@ -1542,7 +1542,7 @@ async function sendMessage(){
   chatHistory.push({role:'user',content:text});
   const loadingId=addLoading();
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev'
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
