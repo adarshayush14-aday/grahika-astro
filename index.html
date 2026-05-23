@@ -1852,5 +1852,12 @@ const today=new Date();
 const dobEl = document.getElementById('dob');
 if(dobEl) dobEl.value=today.toISOString().split('T')[0];
 </script>
+<script>
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/grahika-astro/sw.js')
+    .then(()=>console.log('SW registered'))
+    .catch(e=>console.log('SW error',e));
+}
+</script>
 </body>
 </html>
