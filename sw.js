@@ -1,4 +1,4 @@
-const CACHE_NAME = 'grahika-astro-v3';
+const CACHE_NAME = 'grahika-astro-v4';
 const urlsToCache = [
   '/grahika-astro/',
   '/grahika-astro/index.html',
