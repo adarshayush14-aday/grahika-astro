@@ -1537,6 +1537,16 @@ async function sendMessage(){
   const input=document.getElementById('chatInput');
   const text=input.value.trim();
   if(!text) return;
+  const user = auth.currentUser;
+const today = new Date().toISOString().split('T')[0];
+const countKey = `chat_${user.uid}_${today}`;
+const currentCount = parseInt(localStorage.getItem(countKey) || '0');
+const isPro = document.querySelector('.user-plan')?.textContent?.includes('Pro') || document.querySelector('.user-plan')?.textContent?.includes('Premium');
+if(!isPro && currentCount >= 5){
+  addMsg('🔒 Aapki aaj ki 5 sawalon ki limit khatam ho gayi! Pro plan lein unlimited sawalon ke liye 👑','ai');
+  return;
+}
+localStorage.setItem(countKey, currentCount + 1);
   addMsg(text,'user');
   input.value='';
   chatHistory.push({role:'user',content:text});
