@@ -1815,7 +1815,6 @@ async function doLogout(){
   document.getElementById('navUserInfo').style.display='none';
   toggleProfileDropdown(true);
 }
-
 function updateNavUser(user){
   const name = user.displayName || user.email.split('@')[0];
   const avatar = name.charAt(0).toUpperCase();
@@ -1845,7 +1844,8 @@ function showWelcomeToast(name){
   if(!t) return;
   t.textContent=`🌟 Swagat hai ${name} ji! Aapki cosmic journey shuru hoti hai! ✨`;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3500);
+  setTimeout(()=>t.classList.remove('show'),3500);const savedPlan = localStorage.getItem('userPlan') || 'Free';
+document.querySelector('.user-plan').textContent = savedPlan + ' Plan';
 }
 
 // Make functions global
