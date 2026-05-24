@@ -34,6 +34,26 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
+  @media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav { padding: 0 10px; height: 55px; }
+  .logo { font-size: 16px; }
+  .page { padding: 10px; }
+  .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .plan-grid { grid-template-columns: 1fr; gap: 12px; }
+  .rashi-grid { grid-template-columns: repeat(3, 1fr); }
+  .match-section { grid-template-columns: 1fr; }
+  .match-vs { padding: 5px 0; }
+  .hero-title { font-size: 24px; }
+  .birth-form { grid-template-columns: 1fr; }
+  .planets-grid { grid-template-columns: 1fr; }
+  .panchang-grid { grid-template-columns: 1fr; }
+  .num-grid { grid-template-columns: repeat(2, 1fr); }
+  .kundali-grid { max-width: 280px; }
+  .chat-messages { min-height: 250px; max-height: 250px; }
+  .nav-right .user-plan { display: none; }
+  .hero { padding: 20px 10px; }
+}
 .stars {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none; z-index: 0; overflow: hidden;
