@@ -1555,7 +1555,8 @@ async function sendMessage(){
     removeLoading(loadingId);
     if(resp.ok){
       const data=await resp.json();
-      const reply=data.content.map(c=>c.text||'').join('');
+      const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+const reply=parsed.content.map(c=>c.text||'').join('');
       addMsg(reply,'ai');
       chatHistory.push({role:'assistant',content:reply});
     } else {
