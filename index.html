@@ -1642,13 +1642,14 @@ function selectPM(el){
 }
 function processPayment(){
   closePayment();
+  localStorage.setItem('userPlan', currentPlan);
+document.querySelector('.user-plan').textContent = currentPlan + ' Plan';
   const t=document.getElementById('toast');
   t.textContent=`✅ ${currentPlan} Plan activate ho gaya! Welcome to Grahika Premium! 🎉`;
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),4000);
   document.querySelector('.user-plan').textContent=currentPlan+' Plan';
 }
-
 // ===== REAL FIREBASE AUTH =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
