@@ -34,30 +34,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-  @media (max-width: 768px) {
-  .nav-links { display: none; }
-  .nav { padding: 0 10px; height: 55px; }
-  .logo { font-size: 16px; }
-  .page { padding: 10px; }
-  .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .plan-grid { grid-template-columns: 1fr; gap: 12px; }
-  .rashi-grid { grid-template-columns: repeat(3, 1fr); }
-  .match-section { grid-template-columns: 1fr; }
-  .match-vs { padding: 5px 0; }
-  .hero-title { font-size: 24px; }
-  .birth-form { grid-template-columns: 1fr; }
-  .planets-grid { grid-template-columns: 1fr; }
-  .panchang-grid { grid-template-columns: 1fr; }
-  .num-grid { grid-template-columns: repeat(2, 1fr); }
-  .kundali-grid { max-width: 280px; }
-  .chat-messages { min-height: 250px; max-height: 250px; }
-  .nav-right .user-plan { display: none; }
-  .hero { padding: 20px 10px; }
-}
-.stars {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 0; overflow: hidden;
-}
+  
 .star {
   position: absolute; background: #fff; border-radius: 50%;
   animation: twinkle 3s infinite alternate;
@@ -704,6 +681,48 @@ body {
   display: inline-flex; align-items: center; gap: 5px; margin-bottom: 16px;
 }
 .auth-back-link:hover { color: #FFD700; }
+@media (max-width: 768px) {
+  body { width: 100%; overflow-x: hidden; }
+  #app { width: 100%; overflow-x: hidden; }
+  .nav-links { display: none; }
+  .nav { padding: 0 10px; height: 55px; }
+  .logo { font-size: 15px; }
+  .page { padding: 10px; padding-bottom: 75px; }
+  .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .plan-grid { grid-template-columns: 1fr; gap: 12px; }
+  .rashi-grid { grid-template-columns: repeat(3, 1fr); }
+  .match-section { grid-template-columns: 1fr; }
+  .match-vs { padding: 5px 0; }
+  .hero-title { font-size: 22px; }
+  .birth-form { grid-template-columns: 1fr; max-width: 100%; }
+  .planets-grid { grid-template-columns: 1fr; }
+  .panchang-grid { grid-template-columns: 1fr; }
+  .num-grid { grid-template-columns: repeat(2, 1fr); }
+  .kundali-grid { max-width: 100%; }
+  .chat-messages { min-height: 250px; max-height: 250px; }
+  .nav-right .user-plan { display: none; }
+  .hero { padding: 15px 10px; }
+  .section-title { font-size: 16px; }
+  .auth-card { padding: 25px 20px; margin: 10px; }
+  .bottom-nav { display: flex !important; }
+}
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(15,0,37,0.98);
+  border-top: 1px solid rgba(255,215,0,0.2);
+  padding: 8px 0; z-index: 100;
+  justify-content: space-around; align-items: center;
+  width: 100%;
+}
+.bottom-nav-btn {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px; background: none; border: none; color: #888;
+  font-size: 10px; cursor: pointer; padding: 4px 8px;
+  font-family: 'Poppins', sans-serif; transition: all 0.2s;
+}
+.bottom-nav-btn.active { color: #FFD700; }
+.bottom-nav-btn .bn-icon { font-size: 22px; }
 </style>
 </head>
 <body>
@@ -927,6 +946,23 @@ body {
       <button id="navLoginBtn" onclick="showAuthOverlay()" style="background:linear-gradient(135deg,#7C3AED,#D946EF);border:none;color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">🔐 Login</button>
     </div>
   </nav>
+  <div class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-btn active" onclick="showPage('home');setActiveBottom(this)">
+    <span class="bn-icon">🏠</span>Home
+  </button>
+  <button class="bottom-nav-btn" onclick="showPage('kundali');setActiveBottom(this)">
+    <span class="bn-icon">📊</span>Kundali
+  </button>
+  <button class="bottom-nav-btn" onclick="showPage('chat');setActiveBottom(this)">
+    <span class="bn-icon">🤖</span>AI Guru
+  </button>
+  <button class="bottom-nav-btn" onclick="showPage('horoscope');setActiveBottom(this)">
+    <span class="bn-icon">🌙</span>Rashifal
+  </button>
+  <button class="bottom-nav-btn" onclick="showPage('subscription');setActiveBottom(this)">
+    <span class="bn-icon">👑</span>Premium
+  </button>
+</div>
 
   <!-- HOME PAGE -->
   <div class="page active" id="page-home">
@@ -1891,6 +1927,10 @@ window.openPayment = openPayment;
 window.closePayment = closePayment;
 window.selectPM = selectPM;
 window.processPayment = processPayment;
+  window.setActiveBottom = function(el){
+  document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
 // Init panchang date
 const today=new Date();
 const dobEl = document.getElementById('dob');
