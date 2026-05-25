@@ -5,10 +5,10 @@
   "start_url": "/grahika-astro/",
   "scope": "/grahika-astro/",
   "id": "com.grahika.astro",
-  "display": "standalone",
-  "orientation": "any",
+  "display": "fullscreen",
+  "orientation": "portrait",
   "background_color": "#0a0514",
-  "theme_color": "#0a0514",
+  "theme_color": "#FFD700",
   "lang": "hi",
   "icons": [
     {
