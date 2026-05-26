@@ -2022,12 +2022,39 @@ async function loadPanchang() {
         </div>
         <div class="panchang-item">
           <div class="p-label">Karana</div>
-          <div class="p-value">${p.karana}</div>
-          <div class="p-sub">${p.karana_desc}</div>
+         <div class="panchang-item">
+          <div class="p-label">Sunrise / Sunset</div>
+          <div class="p-value">${p.sunrise} / ${p.sunset}</div>
+          <div class="p-sub">IST, Bhopal</div>
+        <div class="panchang-item">
+          <div class="p-label">Sunrise / Sunset</div>
+          <div class="p-value">${p.sunrise} / ${p.sunset}</div>
+          <div class="p-sub">IST, Bhopal</div>
         </div>
         <div class="panchang-item">
-          <div class="p-label">Sunrise / S
-</script>
+          <div class="p-label">Rahu Kaal</div>
+          <div class="p-value" style="color:#EF4444;">${p.rahu_kaal}</div>
+          <div class="p-sub">⚠️ Avoid Shubh Karya</div>
+        </div>
+      `;
+    }
+  } catch(e) {
+    console.log('Panchang load error:', e);
+  }
+}
+loadPanchang();
+        <div class="panchang-item">
+          <div class="p-label">Rahu Kaal</div>
+          <div class="p-value" style="color:#EF4444;">${p.rahu_kaal}</div>
+          <div class="p-sub">⚠️ Avoid Shubh Karya</div>
+        </div>
+      `;
+    }
+  } catch(e) {
+    console.log('Panchang load error:', e);
+  }
+}
+loadPanchang();
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/grahika-astro/sw.js')
