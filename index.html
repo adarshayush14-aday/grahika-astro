@@ -2043,17 +2043,7 @@ async function loadPanchang() {
   }
 }
 loadPanchang();
-        <div class="panchang-item">
-          <div class="p-label">Rahu Kaal</div>
-          <div class="p-value" style="color:#EF4444;">${p.rahu_kaal}</div>
-          <div class="p-sub">⚠️ Avoid Shubh Karya</div>
-        </div>
-    }
-  } catch(e) {
-    console.log('Panchang load error:', e);
-  }
-}
-loadPanchang();
+</script>
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/grahika-astro/sw.js')
