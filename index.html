@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grahika Astro</title>
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0514">
 <link rel="apple-touch-icon" href="grahika_logo_512.png">
@@ -1448,7 +1449,7 @@ body {
           <li>Numerology Report</li>
           <li class="no">Tarot + Gemstone Report</li>
         </ul>
-        <button class="plan-btn pro" onclick="openPayment('Pro','299','month')">🚀 Pro Lein — ₹299/maah</button>
+        <button class="plan-btn pro" onclick="openPayment('Pro','99','month')">🚀 Pro Lein — ₹299/maah</button>
       </div>
       <div class="plan-card">
         <div style="font-size:36px;">💎</div>
@@ -1464,7 +1465,7 @@ body {
           <li>Family Kundali (5 Members)</li>
           <li>Priority Support 24/7</li>
         </ul>
-        <button class="plan-btn premium" onclick="openPayment('Premium','799','month')">👑 Premium Lein — ₹799/maah</button>
+        <button class="plan-btn premium" onclick="openPayment('Premium','299','month')">👑 Premium Lein — ₹799/maah</button>
       </div>
     </div>
     <div style="text-align:center;">
@@ -1485,7 +1486,7 @@ body {
     <div class="modal-sub" id="payPlanLabel">Pro Plan — ₹299/maah</div>
     <div class="razorpay-badge">
       <span>🔒 Secured by</span>
-      <span class="rz-logo">Razorpay</span>
+      <span class="rz-logo">Cashfree</span>
       <span style="margin-left:auto;font-size:10px;">256-bit SSL Encrypted</span>
     </div>
     <div class="payment-methods">
@@ -1697,14 +1698,40 @@ function selectPM(el){
   document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('selected'));
   el.classList.add('selected');
 }
-function processPayment(){
+async function processPayment(){
   closePayment();
-  localStorage.setItem('userPlan', currentPlan);
-document.querySelector('.user-plan').textContent = currentPlan + ' Plan';
-  const t=document.getElementById('toast');
-  t.textContent=`✅ ${currentPlan} Plan activate ho gaya! Welcome to Grahika Premium! 🎉`;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),4000);
+  const loadingT = document.getElementById('toast');
+  loadingT.textContent = '⏳ Payment process ho rahi hai...';
+  loadingT.classList.add('show');
+  try {
+    const user = auth.currentUser;
+    const amount = currentPlan === 'Pro' ? 99 : currentPlan === 'Premium' ? 299 : 99;
+    const response = await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev/payment', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        order_id: 'order_' + Date.now(),
+        order_amount: amount,
+        order_currency: 'INR',
+        customer_id: user.uid,
+        customer_email: user.email,
+        plan: currentPlan
+      })
+    });
+    const data = await response.json();
+    if (data.payment_session_id) {
+      const cashfree = Cashfree({ mode: 'production' });
+      cashfree.checkout({
+        paymentSessionId: data.payment_session_id,
+        redirectTarget: '_self'
+      });
+    } else {
+      throw new Error('Session create nahi hua');
+    }
+  } catch(e) {
+    loadingT.textContent = '❌ Payment fail hua! Dobara try karein.';
+    setTimeout(() => loadingT.classList.remove('show'), 3000);
+  }
 }
 // ===== REAL FIREBASE AUTH =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
@@ -1932,7 +1959,18 @@ window.processPayment = processPayment;
   el.classList.add('active');
 }
 // Init panchang date
-const today=new Date();
+const urlParams = new URLSearchParams(window.location.search);
+const planFromURL = urlParams.get('plan');
+if(planFromURL) {
+  localStorage.setItem('userPlan', planFromURL);
+  document.querySelector('.user-plan').textContent = planFromURL + ' Plan';
+  const t = document.getElementById('toast');
+  t.textContent = `✅ ${planFromURL} Plan activate ho gaya! 🎉`;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4000);
+  window.history.replaceState({}, '', window.location.pathname);
+}
+  const today=new Date();
 const dobEl = document.getElementById('dob');
 if(dobEl) dobEl.value=today.toISOString().split('T')[0];
 </script>
