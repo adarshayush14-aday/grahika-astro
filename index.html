@@ -1973,6 +1973,7 @@ if(planFromURL) {
   const today=new Date();
 const dobEl = document.getElementById('dob');
 if(dobEl) dobEl.value=today.toISOString().split('T')[0];
+  loadPanchang();
   // Auto load panchang on startup
 async function loadPanchang() {
   const today = new Date();
