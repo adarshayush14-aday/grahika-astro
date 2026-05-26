@@ -1966,17 +1966,7 @@ window.processPayment = processPayment;
   el.classList.add('active');
 }
 // Init panchang date
-const urlParams = new URLSearchParams(window.location.search);
-const planFromURL = urlParams.get('plan');
-if(planFromURL) {
-  localStorage.setItem('userPlan', planFromURL);
-  document.querySelector('.user-plan').textContent = planFromURL + ' Plan';
-  const t = document.getElementById('toast');
-  t.textContent = `✅ ${planFromURL} Plan activate ho gaya! 🎉`;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
-  window.history.replaceState({}, '', window.location.pathname);
-}
+
   const today=new Date();
 const dobEl = document.getElementById('dob');
 if(dobEl) dobEl.value=today.toISOString().split('T')[0];
