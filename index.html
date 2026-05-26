@@ -1804,7 +1804,7 @@ async function doLogin(){
     document.querySelector('#loginForm .auth-btn-main').textContent = '🌟 Login Karein';
     document.querySelector('#loginForm .auth-btn-main').disabled = false;
     const msgs = {
-      'auth/user-not-found': '❌ Yeh email registered nahi hai!',
+      'auth/invalid-credential': '❌ Yeh email registered nahi hai!',
       'auth/wrong-password': '❌ Password galat hai!',
       'auth/invalid-credential': '❌ Email ya password galat hai!',
       'auth/too-many-requests': '⚠️ Bahut zyada attempts! Thodi der baad try karein.',
@@ -1927,7 +1927,7 @@ function showWelcomeToast(name){
   if(!t) return;
   t.textContent=`🌟 Swagat hai ${name} ji! Aapki cosmic journey shuru hoti hai! ✨`;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3500);const savedPlan = localStorage.getItem('userPlan') || 'Free';
+  setTimeout(()=>t.classList.remove('show'),3500); }  const savedPlan = localStorage.getItem('userPlan') || 'Free'; document.querySelector('.user-plan').textContent = savedPlan + ' Plan'; = localStorage.getItem('userPlan') || 'Free';
 document.querySelector('.user-plan').textContent = savedPlan + ' Plan';
 }
 
@@ -1973,7 +1973,6 @@ if(planFromURL) {
   const today=new Date();
 const dobEl = document.getElementById('dob');
 if(dobEl) dobEl.value=today.toISOString().split('T')[0];
-  loadPanchang();
   // Auto load panchang on startup
 async function loadPanchang() {
   const today = new Date();
@@ -2021,16 +2020,15 @@ async function loadPanchang() {
           <div class="p-sub">${p.yoga_desc}</div>
         </div>
         <div class="panchang-item">
-          <div class="p-label">Karana</div>
-         <div class="panchang-item">
-          <div class="p-label">Sunrise / Sunset</div>
-          <div class="p-value">${p.sunrise} / ${p.sunset}</div>
-          <div class="p-sub">IST, Bhopal</div>
-        <div class="panchang-item">
-          <div class="p-label">Sunrise / Sunset</div>
-          <div class="p-value">${p.sunrise} / ${p.sunset}</div>
-          <div class="p-sub">IST, Bhopal</div>
-        </div>
+  <div class="p-label">Karana</div>
+  <div class="p-value">${p.karana}</div>
+  <div class="p-sub">${p.karana_desc}</div>
+</div>
+<div class="panchang-item">
+  <div class="p-label">Sunrise / Sunset</div>
+  <div class="p-value">${p.sunrise} / ${p.sunset}</div>
+  <div class="p-sub">IST, Bhopal</div>
+</div>
         <div class="panchang-item">
           <div class="p-label">Rahu Kaal</div>
           <div class="p-value" style="color:#EF4444;">${p.rahu_kaal}</div>
