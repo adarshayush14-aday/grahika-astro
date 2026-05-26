@@ -1930,9 +1930,13 @@ function showWelcomeToast(name){
 setTimeout(()=>t.classList.remove('show'),3500);
 }
 
-const savedPlan = localStorage.getItem('userPlan') || 'Free';
-document.querySelector('.user-plan').textContent = savedPlan + ' Plan';
-}
+const savedPlan =
+  localStorage.getItem('userPlan')
+  || 'Free';
+document.querySelector(
+  '.user-plan'
+).textContent = 
+  savedPlan + ' Plan';
 
 // Make functions global
 window.switchAuthTab = switchAuthTab;
