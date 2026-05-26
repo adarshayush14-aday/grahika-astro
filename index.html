@@ -1927,7 +1927,10 @@ function showWelcomeToast(name){
   if(!t) return;
   t.textContent=`🌟 Swagat hai ${name} ji! Aapki cosmic journey shuru hoti hai! ✨`;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3500); }  const savedPlan = localStorage.getItem('userPlan') || 'Free'; document.querySelector('.user-plan').textContent = savedPlan + ' Plan'; = localStorage.getItem('userPlan') || 'Free';
+setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+const savedPlan = localStorage.getItem('userPlan') || 'Free';
 document.querySelector('.user-plan').textContent = savedPlan + ' Plan';
 }
 
