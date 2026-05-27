@@ -1699,8 +1699,7 @@ function closePayment(){document.getElementById('payModal').classList.remove('op
 function selectPM(el){
   document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('selected'));
   el.classList.add('selected');
-}
-async function processPayment(){
+  async function processPayment(){
   closePayment();
   const loadingT = document.getElementById('toast');
   loadingT.textContent = '⏳ Payment process ho rahi hai...';
@@ -1727,29 +1726,33 @@ async function processPayment(){
         paymentSessionId: data.payment_session_id,
         redirectTarget: '_self'
       }).then(async (result) => {
-  if (result && result.paymentDetails) {
-    const planName = currentPlan.toLowerCase();
-    const user = auth.currentUser;
-    if (user) {
-      await saveUserPlan(user.uid, planName);
-      updatePlanUI(planName);
-     loadingT.textContent = '✅ Payment successful! ' + currentPlan + ' Plan activated! 🎉';
-      loadingT.classList.add('show');
-      setTimeout(() => loadingT.classList.remove('show'), 4000);
-      showPage('home');
-    }else {
-  loadingT.textContent = '❌ Payment cancelled ya fail hua!';
-  loadingT.style.background = 'linear-gradient(135deg, #EF4444, #F97316)';
-  loadingT.classList.add('show');
-  setTimeout(() => loadingT.classList.remove('show'), 3000);
+        if (result && result.paymentDetails) {
+          const planName = currentPlan.toLowerCase();
+          const u = auth.currentUser;
+          if (u) {
+            await saveUserPlan(u.uid, planName);
+            updatePlanUI(planName);
+            loadingT.textContent = '✅ Payment successful! ' + currentPlan + ' Plan activated! 🎉';
+            loadingT.classList.add('show');
+            setTimeout(() => loadingT.classList.remove('show'), 4000);
+            showPage('home');
+          }
+        } else {
+          loadingT.textContent = '❌ Payment cancelled ya fail hua!';
+          loadingT.style.background = 'linear-gradient(135deg, #EF4444, #F97316)';
+          loadingT.classList.add('show');
+          setTimeout(() => loadingT.classList.remove('show'), 3000);
+        }
+      });
     }
-    }
-  });
   } catch(e) {
     loadingT.textContent = '❌ Payment fail hua! Dobara try karein.';
+    loadingT.classList.add('show');
     setTimeout(() => loadingT.classList.remove('show'), 3000);
   }
 }
+}
+
 // ===== REAL FIREBASE AUTH =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
