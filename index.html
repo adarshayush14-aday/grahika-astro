@@ -1736,7 +1736,6 @@ async function processPayment(){
       await saveUserPlan(user.uid, planName);
       updatePlanUI(planName);
      loadingT.textContent = '✅ Payment successful! ' + currentPlan + ' Plan activated! 🎉';
-        loadingT.style.background = 'linear-gradient(135deg, #10B981, #06B6D4)';
       loadingT.classList.add('show');
       setTimeout(() => loadingT.classList.remove('show'), 4000);
       showPage('home');
