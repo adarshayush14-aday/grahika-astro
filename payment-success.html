@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful - Grahika Astro</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0a0514;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    .box {
+      background: #1a0f2e;
+      border: 1px solid #7c3aed;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 400px;
+      width: 90%;
+    }
+    .icon { font-size: 64px; margin-bottom: 16px; }
+    h1 { color: #a78bfa; margin-bottom: 8px; }
+    p { color: #c4b5fd; }
+    a {
+      display: inline-block;
+      margin-top: 24px;
+      background: #7c3aed;
+      color: white;
+      padding: 12px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="icon">✅</div>
+    <h1>Payment Successful!</h1>
+    <p>Aapka premium plan activate ho gaya hai.</p>
+    <p>Dhanyawad Grahika Astro choose karne ke liye! 🙏</p>
+    <p id="orderInfo" style="font-size:12px; opacity:0.6; margin-top:16px;"></p>
+    <a href="/">🏠 Dashboard par Jaao</a>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('order_id');
+    if (orderId) {
+      document.getElementById('orderInfo').textContent = 'Order ID: ' + orderId;
+    }
+  </script>
+</body>
+</html>
