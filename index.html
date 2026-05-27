@@ -1733,7 +1733,7 @@ async function processPayment(){
       cashfree.checkout({
         paymentSessionId: data.payment_session_id,
         redirectTarget: '_self'
-      });
+      })
       .then(async (result) => {
   if (result && result.paymentDetails) {
     const planName = currentPlan.toLowerCase();
