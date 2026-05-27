@@ -1528,36 +1528,59 @@ function showKTab(tab){
 }
 
 // Generate Kundali
-function generateKundali(){
+async function generateKundali(){
   const name=document.getElementById('userName').value;
   const dob=document.getElementById('dob').value;
+  const tob=document.getElementById('tob').value;
+  const pob=document.getElementById('pob').value;
   if(!name||!dob){alert('Naam aur Janm Tithi zaroori hai!');return;}
   showPage('kundali');
+  document.querySelector('.kundali-chart').innerHTML=`<div style="text-align:center;padding:40px;color:#B8A0FF;">🔮 ${name} ji ki Kundali ban rahi hai...<br><br><div class="loading"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div></div>`;
+  try{
+    const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:800,
+      system:'Aap Vedic Jyotish expert hain. Birth details se Kundali analysis karo. Hindi mein jawab do. Lagna, planets, aur 3 predictions batao.',
+      messages:[{role:'user',content:`Naam: ${name}, Janm Tithi: ${dob}, Samay: ${tob||'Anjaan'}, Sthan: ${pob||'India'}. Kundali analysis karo.`}]})
+    });
+    if(resp.ok){
+      const data=await resp.json();
+      const parsed=typeof data==='string'?JSON.parse(data):data;
+      const analysis=parsed.content.map(c=>c.text||'').join('');
+      document.querySelector('.kundali-chart').innerHTML=`
+        <div style="margin-bottom:15px;color:#FFD700;font-family:'Cinzel',serif;font-size:18px;">🔮 ${name} ji ki Kundali</div>
+        <div style="font-size:12px;color:#888;margin-bottom:15px;">${dob} • ${tob||'Samay Anjaan'} • ${pob||'India'}</div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.2);border-radius:12px;padding:20px;text-align:left;font-size:13px;color:#ccc;line-height:1.8;">${analysis.replace(/\n/g,'<br>')}</div>`;
+    }
+  }catch(e){
+    document.querySelector('.kundali-chart').innerHTML=`<div style="text-align:center;padding:20px;color:#EF4444;">❌ Kundali load nahi hui. Dobara try karein.</div>`;
+  }
 }
 
 // AI Chat
-const rashifalData={
-  mesh:'Aaj ka din kaafi energetic rahega. Mangal aapko boost de raha hai. Career mein nai opportunity aa sakti hai. Lucky Color: Red. Lucky Number: 9.',
-  vrishabh:'Shukra ki kirpa se aaj prem mein meethas aayegi. Paise ka kharcha thoda zyada ho sakta hai. Patience rakhen.',
-  mithun:'Budh ki sthiti achhi hai. Communication skills kaam aayengi. Naya course ya skill seekhne ka achha din hai.',
-  kark:'Chandra ki wajah se aaj emotional dian rahega. Parivar mein sukh milega. Swasthya ka khayal rakhein.',
-  singh:'Surya ki shakti aapke saath hai. Leadership mein chamak aayegi. Boss ki praise mil sakti hai.',
-  kanya:'Kanya rashi walon ke liye aaj ka din mehnat ka hai. Details par dhyan dein. Koi document sign karne se pehle padhen.',
-  tula:'Prem aur sambandh mein balance zaroori hai. Shukra ki kripa se social circle mein nai dosti ho sakti hai.',
-  vrischik:'Aaj gehri soch aur research ka samay hai. Kisi purani baat ka rahasya khul sakta hai. Financial decision soch samajh kar lein.',
-  dhanu:'Guru ki dristi aaj shubh hai. Vidya aur travel ke yog hain. Kisi achhe kaam mein paisa lagayen.',
-  makar:'Shani ki wajah se kaam mein thodi der ho sakti hai. Mehnat rang laegi. Real estate mein labh ke yog hain.',
-  kumbh:'Aaj creative ideas aaenge. Technology aur innovation mein safalta milegi. Doston ka saath milega.',
-  meen:'Guru ki dristi se aaj adhyatmik ujjas rahega. Sapne sach ho sakte hain. Charity ka din hai.'
-};
-
-function showRashifal(el,rashi){
+const rashifalData={};
+ async function showRashifal(el,rashi){
   document.querySelectorAll('.rashi-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
   const sym=el.querySelector('.rashi-sym').textContent;
   const name=el.querySelector('.rashi-name').textContent;
   const eng=el.querySelector('.rashi-eng').textContent;
-  const content=rashifalData[rashi]||'AI se Rashifal fetch ho raha hai...';
+  document.getElementById('rashifalContent').innerHTML=`<div style="text-
+  align:center;padding:30px;color:#B8A0FF;">🔮 ${name} ka Rashifal load ho raha
+  hai...</div>`;
+   let content='';
+   try{
+     const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{
+       method:'POST',headers:{'Content-Type':'application/json'},
+       body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:300,     
+                            system:'Aap Vedic Astrology expert hain. Aaj ka rashifal Hindi mein 80 words 
+                              mein batao. Emojis use karo.',     
+                            messages:[{role:'user',content:`Aaj ${new Date().toLocaleDateString('hi-IN')} 
+                            ke liye ${name} (${eng}) rashi ka rashifal batao.`}]})   
+     });   
+     if(resp.ok){const data=await resp.json();const parsed=typeof data==='string'?
+       JSON.parse(data):data;content=parsed.content.map(c=>c.text||'').join('');}
+   }catch(e){content=rashifalData[rashi]||'Aaj ka din achha rahega! ⭐';}
   document.getElementById('rashifalContent').innerHTML=`
     <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.2);border-radius:14px;padding:20px;animation:fadeUp 0.3s ease;">
       <div style="font-size:20px;font-weight:700;color:#FFD700;margin-bottom:10px;">${sym} ${name} Rashi (${eng})</div>
@@ -1580,15 +1603,16 @@ async function sendMessage(){
   if(!text) return;
   const user = auth.currentUser;
 const today = new Date().toISOString().split('T')[0];
-const countKey = `chat_${user.uid}_${today}`;
-const currentCount = parseInt(localStorage.getItem(countKey) || '0');
+const countRef = doc(db, 'chatLimits', `${user.uid}_${today}`);
+const countSnap = await getDoc(countRef);
+const currentCount = countSnap.exists() ? (countSnap.data().count || 0) : 0;S
 const userPlan = window.currentUserPlan || 'free';
 const isPro = userPlan.includes('Pro') || userPlan.includes('Premium');
 if(!isPro && currentCount >= 5){
   addMsg('🔒 Aapki aaj ki 5 sawalon ki limit khatam ho gayi! Pro plan lein unlimited sawalon ke liye 👑','ai');
   return;
 }
-localStorage.setItem(countKey, currentCount + 1);
+await setDoc(countRef, { count: currentCount + 1, date: today }, { merge: true });
   addMsg(text,'user');
   input.value='';
   chatHistory.push({role:'user',content:text});
@@ -1714,9 +1738,21 @@ async function processPayment(){
     const user = auth.currentUser;
     if (user) {
       await saveUserPlan(user.uid, planName);
-      loadingT.textContent = '✅ Payment successful! Plan activated!';
+      updatePlanUI(planName);
+      loadingT.textContent = '✅ Payment successful! ' + currentPlan + ' Plan
+        activated! 🎉';
+        loadingT.style.background = 'linear-gradient(135deg, #10B981, #06B6D4)';
+      loadingT.classList.add('show');
+      setTimeout(() => loadingT.classList.remove('show'), 4000);
+      showPage('home');
       setTimeout(() => loadingT.classList.remove('show'), 3000);
     }
+    } else {
+  loadingT.textContent = '❌ Payment cancelled ya fail hua!';
+  loadingT.style.background = 'linear-gradient(135deg, #EF4444, #F97316)';
+  loadingT.classList.add('show');
+  setTimeout(() => loadingT.classList.remove('show'), 3000);
+}
   }
 });
     } else {
@@ -2086,6 +2122,7 @@ async function loadPanchang() {
   }
 }
 loadPanchang();
+  showRashifal(document.querySelector('.rashi-card'), 'mesh');
 </script>
 </body>
 </html>
