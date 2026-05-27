@@ -725,6 +725,7 @@ body {
 .bottom-nav-btn.active { color: #FFD700; }
 .bottom-nav-btn .bn-icon { font-size: 22px; }
 </style>
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 </head>
 <body>
 
@@ -1449,7 +1450,7 @@ body {
           <li>Numerology Report</li>
           <li class="no">Tarot + Gemstone Report</li>
         </ul>
-        <button class="plan-btn pro" onclick="openPayment('Pro','99','month')">🚀 Pro Lein — ₹99/maah</button>
+       <button class="plan-btn pro" id="payBtn_Pro" onclick="startPayment('Pro', 99)">🚀 Pro Lein — ₹99/maah</button>
       </div>
       <div class="plan-card">
         <div style="font-size:36px;">💎</div>
@@ -1465,7 +1466,7 @@ body {
           <li>Family Kundali (5 Members)</li>
           <li>Priority Support 24/7</li>
         </ul>
-        <button class="plan-btn premium" onclick="openPayment('Premium','299','month')">👑 Premium Lein — ₹299/maah</button>
+       <button class="plan-btn premium" id="payBtn_Premium" onclick="startPayment('Premium', 299)">👑 Premium Lein — ₹299/maah</button>
       </div>
     </div>
     <div style="text-align:center;">
@@ -1473,7 +1474,7 @@ body {
         <div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#FFD700;">2 Maah</div><div style="font-size:11px;color:#888;">Free Yearly Plan Mein</div></div>
         <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
         <div style="text-align:center;"><div style="font-size:14px;font-weight:600;color:#fff;">Pro Annual</div><div style="font-size:20px;font-weight:700;color:#FFD700;">₹2,990</div><div style="font-size:11px;color:#888;">₹3,588 ki jagah (17% off)</div></div>
-        <button class="plan-btn pro" style="align-self:center;padding:10px 18px;font-size:12px;" onclick="openPayment('Pro Annual','2990','year')">Yearly Lein</button>
+        <button class="plan-btn pro" style="align-self:center;padding:10px 18px;font-size:12px;" onclick="startPayment('Pro Annual','2990','year')">Yearly Lein</button>
       </div>
     </div>
   </div>
@@ -1688,7 +1689,7 @@ function flipCard(el,name,sym,desc){
 
 // Payment
 let currentPlan='';
-function openPayment(name,price,period){
+function startPayment(name,price,period){
   currentPlan=name;
   document.getElementById('payPlanLabel').textContent=`${name} Plan — ₹${price}/${period==='year'?'saal':'maah'}`;
   document.getElementById('payModal').classList.add('open');
@@ -1957,7 +1958,7 @@ window.handleChatKey = handleChatKey;
 window.showRashifal = showRashifal;
 window.showMatchResult = showMatchResult;
 window.flipCard = flipCard;
-window.openPayment = openPayment;
+window.startPayment = startPayment;
 window.closePayment = closePayment;
 window.selectPM = selectPM;
 window.processPayment = processPayment;
@@ -2044,6 +2045,61 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/grahika-astro/sw.js')
     .then(()=>console.log('SW registered'))
     .catch(e=>console.log('SW error',e));
+}
+<script>
+const cashfree = Cashfree({ mode: "production" });
+
+async function startPayment(planName, amount) {
+  const userEmail = prompt("Apna email enter karo (receipt ke liye):");
+  if (!userEmail) return;
+
+  const btn = document.getElementById('payBtn_' + planName);
+  if(btn) {
+    btn.textContent = "Processing...";
+    btn.disabled = true;
+  }
+
+  try {
+    const orderResponse = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        planName: planName,
+        amount: amount,
+        userEmail: userEmail,
+        userName: "Grahika User"
+      })
+    });
+
+    const orderData = await orderResponse.json();
+
+    if (!orderData.success) {
+      alert("Order create karne mein problem. Dobara try karo.");
+      return;
+    }
+
+    cashfree.checkout({
+      paymentSessionId: orderData.paymentSessionId,
+      redirectTarget: "_modal"
+    }).then(function(result) {
+      if (result.error) {
+        alert("Payment error: " + result.error.message);
+      }
+      if (result.paymentDetails) {
+        window.location.href = 
+          "/payment-success?order_id=" + orderData.orderId;
+      }
+    });
+
+  } catch (error) {
+    console.error(error);
+    alert("Kuch galat hua. Dobara try karo.");
+  } finally {
+    if(btn) {
+      btn.textContent = "Pay Now";
+      btn.disabled = false;
+    }
+  }
 }
 </script>
 </body>
