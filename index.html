@@ -1726,6 +1726,17 @@ async function processPayment(){
         paymentSessionId: data.payment_session_id,
         redirectTarget: '_self'
       });
+      .then(async (result) => {
+  if (result && result.paymentDetails) {
+    const planName = currentPlan.toLowerCase();
+    const user = auth.currentUser;
+    if (user) {
+      await saveUserPlan(user.uid, planName);
+      loadingT.textContent = '✅ Payment successful! Plan activated!';
+      setTimeout(() => loadingT.classList.remove('show'), 3000);
+    }
+  }
+});
     } else {
       throw new Error('Session create nahi hua');
     }
@@ -1765,7 +1776,52 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-function showAuthOverlay(){ document.getElementById('authOverlay').classList.remove('hidden'); }
+// ===== FIRESTORE PLAN FUNCTIONS =====
+async function loadUserPlan(uid) {
+  try {
+    const docRef = doc(db, 'users', uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      updatePlanUI(data.plan || 'free');
+    } else {
+      await setDoc(docRef, { plan: 'free', createdAt: new Date().toISOString() });
+      updatePlanUI('free');
+    }
+  } catch(e) {
+    console.error('Plan load error:', e);
+  }
+}
+
+async function saveUserPlan(uid, plan) {
+  try {
+    const docRef = doc(db, 'users', uid);
+    await setDoc(docRef, { plan: plan, updatedAt: new Date().toISOString() }, { merge: true });
+    updatePlanUI(plan);
+  } catch(e) {
+    console.error('Plan save error:', e);
+  }
+}
+
+function updatePlanUI(plan) {
+  const badge = document.getElementById('planBadge');
+  if (!badge) return;
+  if (plan === 'premium') {
+    badge.textContent = '💎 Premium';
+    badge.style.background = 'linear-gradient(135deg, #FFD700, #F97316)';
+    badge.style.color = '#000';
+  } else if (plan === 'pro') {
+    badge.textContent = '⭐ Pro';
+    badge.style.background = 'linear-gradient(135deg, #7C3AED, #D946EF)';
+    badge.style.color = '#fff';
+  } else {
+    badge.textContent = 'Free Plan';
+    badge.style.background = 'rgba(255,255,255,0.1)';
+    badge.style.color = '#fff';
+  }
+  window.currentUserPlan = plan;
+}
+  function showAuthOverlay(){ document.getElementById('authOverlay').classList.remove('hidden'); }
 function hideAuthOverlay(){ document.getElementById('authOverlay').classList.add('hidden'); }
 
 function switchAuthTab(tab){
