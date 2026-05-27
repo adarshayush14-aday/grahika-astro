@@ -2015,6 +2015,12 @@ if(dobEl) dobEl.value=today.toISOString().split('T')[0];
   // Auto load panchang on startup
 async function loadPanchang() {
   const today = new Date();
+   let userCity = 'New Delhi';
+  try {
+    const locRes = await fetch('https://ipapi.co/json/');
+    const locData = await locRes.json();
+    userCity = locData.city || 'New Delhi';
+  } catch(e) { userCity = 'New Delhi'; }
   const dateStr = today.toLocaleDateString('hi-IN', { 
     weekday: 'long', year: 'numeric', 
     month: 'long', day: 'numeric' 
@@ -2030,7 +2036,7 @@ async function loadPanchang() {
         system: `Aap Vedic Panchang expert hain. Sirf JSON format mein jawab dein, koi extra text nahi.`,
         messages: [{
           role: 'user',
-          content: `Aaj ki date hai: ${dateStr}. Location: Bhopal, India. Sirf is exact JSON format mein jawab do: {"tithi":"naam","tithi_paksha":"Shukla/Krishna Paksha","nakshatra":"naam","nakshatra_desc":"Chandra Nakshatra","yoga":"naam","yoga_desc":"Shubh/Ashubh","karana":"naam","karana_desc":"description","sunrise":"HH:MM AM","sunset":"HH:MM PM","rahu_kaal":"HH:MM AM/PM – HH:MM AM/PM"}`
+          content: `Aaj ki date hai: ${dateStr}. Location: ${userCity}, India. Sirf is exact JSON format mein jawab do: {"tithi":"naam","tithi_paksha":"Shukla/Krishna Paksha","nakshatra":"naam","nakshatra_desc":"Chandra Nakshatra","yoga":"naam","yoga_desc":"Shubh/Ashubh","karana":"naam","karana_desc":"description","sunrise":"HH:MM AM","sunset":"HH:MM PM","rahu_kaal":"HH:MM AM/PM – HH:MM AM/PM"}`
         }]
       })
     });
