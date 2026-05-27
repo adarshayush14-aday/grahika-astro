@@ -1739,7 +1739,6 @@ async function processPayment(){
       loadingT.classList.add('show');
       setTimeout(() => loadingT.classList.remove('show'), 4000);
       showPage('home');
-      setTimeout(() => loadingT.classList.remove('show'), 3000);
     }
     } else {
   loadingT.textContent = '❌ Payment cancelled ya fail hua!';
@@ -1748,7 +1747,7 @@ async function processPayment(){
   setTimeout(() => loadingT.classList.remove('show'), 3000);
 }
   }
-}
+
   } catch(e) {
     loadingT.textContent = '❌ Payment fail hua! Dobara try karein.';
     setTimeout(() => loadingT.classList.remove('show'), 3000);
