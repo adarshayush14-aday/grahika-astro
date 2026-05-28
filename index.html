@@ -52,7 +52,7 @@ body {
   100%{background-position:200% center}
 }
 
-#app { position: relative; z-index: 1; min-height: 100vh; padding-top: 0; }
+#app { position: relative; z-index: 1; min-height: 100vh; }
 
 /* NAV */
 .nav {
@@ -102,7 +102,7 @@ body {
 
 /* PAGES */
 .page { display: none; padding: 15px; max-width: 100%; margin: 0 auto; width: 100%; box-sizing: border-box; }
-.page.active { display: block; animation: fadeUp 0.4s ease; padding-top: 20px; }
+.page.active { display: block; animation: fadeUp 0.4s ease; }
 
 /* HERO */
 .hero {
@@ -730,7 +730,7 @@ body {
 </head>
 <body>
 
-<div class="stars" id="starsContainer" style="position:fixed;inset:0;z-index:0;pointer-events:none;"></div>
+<div class="stars" id="starsContainer"></div>
 
 <!-- ===== AUTH OVERLAY ===== -->
 <div id="authOverlay">
@@ -1117,7 +1117,7 @@ body {
       <div class="section-line"></div>
     </div>
 
-    <div class="kundali-chart" id="kundaliChart">
+    <div class="kundali-chart">
     <div style="padding:30px;text-align:center;color:#888;">
   <div style="font-size:48px;margin-bottom:15px;">🔮</div>
   <div style="font-size:14px;color:#B8A0FF;">Home page pe apni birth details bharein<br>aur "Meri Kundali Banao" click karein</div>
@@ -1134,25 +1134,37 @@ body {
     </div>
 
     <div id="ktab-planets">
-<div style="text-align:center;padding:30px;color:#888;">
-<div style="font-size:36px;margin-bottom:10px;">🪐</div>
-<div style="font-size:13px;color:#B8A0FF;">Pehle Home page pe apni birth details bharein<br>aur Kundali banao — Graha positions automatically aayengi</div>
-</div>
-</div>
+      <div class="planets-grid">
+        <div class="planet-row"><div class="planet-sym">☉</div><div class="planet-info"><div class="planet-name">Surya (Sun)</div><div class="planet-rashi">Mesh Rashi (Aries)</div></div><div class="planet-deg">15°42'</div></div>
+        <div class="planet-row"><div class="planet-sym">☽</div><div class="planet-info"><div class="planet-name">Chandra (Moon)</div><div class="planet-rashi">Kark Rashi (Cancer)</div></div><div class="planet-deg">8°15'</div></div>
+        <div class="planet-row"><div class="planet-sym">♂</div><div class="planet-info"><div class="planet-name">Mangal (Mars)</div><div class="planet-rashi">Kanya Rashi (Virgo)</div></div><div class="planet-deg">22°30'</div></div>
+        <div class="planet-row"><div class="planet-sym">☿</div><div class="planet-info"><div class="planet-name">Budh (Mercury)</div><div class="planet-rashi">Mesh Rashi (Aries)</div></div><div class="planet-deg">3°18'</div></div>
+        <div class="planet-row"><div class="planet-sym">♃</div><div class="planet-info"><div class="planet-name">Guru (Jupiter)</div><div class="planet-rashi">Vrischik (Scorpio)</div></div><div class="planet-deg">17°55'</div></div>
+        <div class="planet-row"><div class="planet-sym">♀</div><div class="planet-info"><div class="planet-name">Shukra (Venus)</div><div class="planet-rashi">Vrishabh (Taurus)</div></div><div class="planet-deg">29°10'</div></div>
+        <div class="planet-row"><div class="planet-sym">♄</div><div class="planet-info"><div class="planet-name">Shani (Saturn)</div><div class="planet-rashi">Makar (Capricorn)</div></div><div class="planet-deg">11°40'</div></div>
+        <div class="planet-row"><div class="planet-sym">☊</div><div class="planet-info"><div class="planet-name">Rahu (North Node)</div><div class="planet-rashi">Mithun (Gemini)</div></div><div class="planet-deg">4°22'</div></div>
+      </div>
+    </div>
 
     <div id="ktab-dasha" style="display:none;">
-<div style="text-align:center;padding:30px;color:#888;">
-<div style="font-size:36px;margin-bottom:10px;">⏳</div>
-<div style="font-size:13px;color:#B8A0FF;">Pehle Home page pe Kundali banao — Dasha automatically load hogi</div>
-</div>
-</div>
+      <div style="margin-bottom:15px;padding:12px;background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.2);border-radius:10px;">
+        <div style="font-size:12px;color:#888;">Vartaman Mahadasha</div>
+        <div style="font-size:16px;font-weight:700;color:#FFD700;">Shani Mahadasha (Saturn)</div>
+        <div style="font-size:12px;color:#ccc;">Jan 2023 – Jan 2042 • Antardasha: Guru (Jupiter)</div>
+      </div>
+      <div class="dasha-timeline">
+        <div class="dasha-item"><div class="dasha-planet">Shukra Mahadasha (Venus)</div><div class="dasha-period">2003 – 2023 (20 Years)</div><div class="dasha-desc">Sukh, Vaibhav aur Prem ka samay. Relationships mein milawat.</div></div>
+        <div class="dasha-item active"><div class="dasha-planet">⭐ Shani Mahadasha (Saturn) — ABHI</div><div class="dasha-period">2023 – 2042 (19 Years)</div><div class="dasha-desc">Mehnat, discipline aur karma ka samay. Patience zaroori hai.</div></div>
+        <div class="dasha-item"><div class="dasha-planet">Budh Mahadasha (Mercury)</div><div class="dasha-period">2042 – 2059 (17 Years)</div><div class="dasha-desc">Budhi, vyapar aur communication ka boost milega.</div></div>
+        <div class="dasha-item"><div class="dasha-planet">Ketu Mahadasha</div><div class="dasha-period">2059 – 2066 (7 Years)</div><div class="dasha-desc">Adhyatmik jagruti aur purani cheezein chhodne ka samay.</div></div>
+      </div>
+    </div>
 
-<div id="ktab-numerology" style="display:none;">
-<div style="text-align:center;padding:30px;color:#888;">
-<div style="font-size:36px;margin-bottom:10px;">🔢</div>
-<div style="font-size:13px;color:#B8A0FF;">Pehle Home page pe Kundali banao — Numerology automatically calculate hogi</div>
-</div>
-</div>
+    <div id="ktab-numerology" style="display:none;">
+      <div class="num-display">
+        <div class="big-num">7</div>
+        <div class="num-label">Aapka Moolank (Life Path Number)</div>
+      </div>
       <div class="num-grid">
         <div class="num-card"><div class="num-val" style="color:#D946EF;">7</div><div class="num-type">Moolank</div></div>
         <div class="num-card"><div class="num-val" style="color:#06B6D4;">3</div><div class="num-type">Bhagyank</div></div>
@@ -1496,7 +1508,7 @@ if (proPages.includes(name) && plan === 'free') {
   document.getElementById('page-'+name).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('active')});
   document.querySelectorAll('.nav-btn').forEach(b=>{if(b.textContent.toLowerCase().includes(name.slice(0,3)))b.classList.add('active')});
-  document.documentElement.scrollTop = 0; document.body.scrollTop = 0;
+  window.scrollTo(0,0);
 }
 
 // Kundali tabs
@@ -1536,12 +1548,6 @@ async function generateKundali(){
         <div style="font-size:12px;color:#888;margin-bottom:15px;">${dob} • ${tob||'Samay Anjaan'} • ${pob||'India'}</div>
         <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.2);border-radius:12px;padding:20px;text-align:left;font-size:13px;color:#ccc;line-height:1.8;">${analysis.replace(/\n/g,'<br>')}</div>`;
     }
-   window.lastKundaliData = {name,dob,tob,pob,analysis};
-showKTab('planets');
-if(window.loadKundaliTab){
-  window.loadKundaliTab('dasha',{name,dob,tob,pob});
-  window.loadKundaliTab('numerology',{name,dob,tob,pob});
-}
   }catch(e){
     document.querySelector('.kundali-chart').innerHTML=`<div style="text-align:center;padding:20px;color:#EF4444;">❌ Kundali load nahi hui. Dobara try karein.</div>`;
   }
