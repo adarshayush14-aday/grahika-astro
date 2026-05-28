@@ -1287,8 +1287,8 @@ body {
     </div>
     <div id="rashifalContent" style="margin-top:15px;animation:fadeUp 0.3s ease;">
       <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.2);border-radius:14px;padding:20px;">
-        <div style="font-size:20px;font-weight:700;color:#FFD700;margin-bottom:10px;">♈ Mesh Rashi (Aries)</div>
-        <div style="font-size:13px;color:#ccc;line-height:1.8;margin-bottom:15px;">Aaj ka din aapke liye kaafi productive rahega. Mangal ki sthiti aapko energy aur utsah degi. Vyapar mein naya contract mil sakta hai. Parivar ke saath achha samay beeta paenge. Swasthya ka dhyan rakhein — thoda aramdeh rahen.</div>
+        <div style="font-size:20px;font-weight:700;color:#FFD700;margin-bottom:10px;">🔮 Rashifal Load Ho Raha Hai...</div>
+        <div style="font-size:13px;color:#ccc;line-height:1.8;margin-bottom:15px;">⏳ Load ho raha hai...</div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
           <div style="text-align:center;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;">
             <div style="font-size:18px;">💼</div><div style="font-size:11px;color:#888;margin-top:4px;">Career</div>
@@ -1513,6 +1513,10 @@ if (proPages.includes(name) && plan === 'free') {
 
 // Kundali tabs
 function showKTab(tab){
+  if(tab==='planets'&&window.lastKundaliData){
+    loadKundaliTab(tab,window.lastKundaliData);
+    return;
+  }
   ['planets','dasha','numerology','tarot','gems'].forEach(t=>{
     const el=document.getElementById('ktab-'+t);
     if(el)el.style.display=t===tab?'block':'none';
@@ -1645,9 +1649,33 @@ function sendQuickQ(q){
 function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
 
 // Match
-function showMatchResult(){
-  document.getElementById('matchResult').style.display='block';
-  document.getElementById('matchResult').scrollIntoView({behavior:'smooth'});
+async function showMatchResult(){
+  const boy = {
+    name: document.querySelectorAll('.match-person input[type=text]')[0].value || 'Ladka',
+    dob: document.querySelectorAll('.match-person input[type=date]')[0].value,
+    tob: document.querySelectorAll('.match-person input[type=time]')[0].value
+  };
+  const girl = {
+    name: document.querySelectorAll('.match-person input[type=text]')[1].value || 'Ladki',
+    dob: document.querySelectorAll('.match-person input[type=date]')[1].value,
+    tob: document.querySelectorAll('.match-person input[type=time]')[1].value
+  };
+  if(!boy.dob||!girl.dob){alert('Dono ki janm tithi zaroori hai!');return;}
+  const result = document.getElementById('matchResult');
+  result.style.display='block';
+  result.innerHTML='<div style="text-align:center;padding:30px;color:#B8A0FF;">🔮 Kundali Milan ho rahi hai...<div class="loading"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div></div>';
+  result.scrollIntoView({behavior:'smooth'});
+  try{
+    const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:800,system:'Aap Vedic Jyotish expert hain. Kundali Milan karo aur 36 Gunas ka score batao. Hindi mein jawab do.',messages:[{role:'user',content:`${boy.name} (DOB: ${boy.dob}, TOB: ${boy.tob||'Unknown'}) aur ${girl.name} (DOB: ${girl.dob}, TOB: ${girl.tob||'Unknown'}) ki Kundali Milan karo. Total score, Mangal Dosha status, aur shaadi ke baare mein prediction batao.`}]})});
+    if(resp.ok){
+      const data=await resp.json();
+      const parsed=typeof data==='string'?JSON.parse(data):data;
+      const analysis=parsed.content.map(c=>c.text||'').join('');
+      result.innerHTML=`<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(16,185,129,0.3);border-radius:16px;padding:25px;animation:fadeUp 0.3s ease;"><div style="font-size:16px;font-weight:700;color:#FFD700;margin-bottom:15px;">💑 ${boy.name} & ${girl.name} — Kundali Milan Report</div><div style="font-size:13px;color:#ccc;line-height:1.9;">${analysis.replace(/\n/g,'<br>')}</div></div>`;
+    }
+  }catch(e){
+    result.innerHTML='<div style="color:#EF4444;padding:20px;text-align:center;">❌ Milan nahi ho saka. Dobara try karein.</div>';
+  }
 }
 
 // Tarot
@@ -1991,6 +2019,28 @@ window.doLogout = doLogout;
 window.toggleProfileDropdown = toggleProfileDropdown;
 window.showPage = showPage;
 window.showKTab = showKTab;
+ window.loadKundaliTab = async function(tab, data) {
+  const {name,dob,tob,pob} = data;
+  const el = document.getElementById('ktab-'+tab);
+  if(!el) return;
+  el.style.display='block';
+  if(tab==='numerology'){
+    el.innerHTML='<div style="text-align:center;padding:20px;color:#B8A0FF;">🔢 Numerology calculate ho rahi hai...</div>';
+    try{
+      const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:400,system:'Aap Numerology expert hain. Sirf JSON mein jawab do: {"moolank":1,"bhagyank":2,"naamank":3,"atmaank":4,"vyaktiank":5,"karmaank":6,"description":"text"}',messages:[{role:'user',content:`Naam: ${name}, DOB: ${dob}. Numerology calculate karo.`}]})});
+      if(resp.ok){const d=await resp.json();const p=typeof d==='string'?JSON.parse(d):d;const t=p.content.map(c=>c.text||'').join('');const clean=t.replace(/```json|```/g,'').trim();const n=JSON.parse(clean);
+      el.innerHTML=`<div class="num-display"><div class="big-num">${n.moolank}</div><div class="num-label">Aapka Moolank (Life Path Number)</div></div><div class="num-grid"><div class="num-card"><div class="num-val" style="color:#D946EF;">${n.moolank}</div><div class="num-type">Moolank</div></div><div class="num-card"><div class="num-val" style="color:#06B6D4;">${n.bhagyank}</div><div class="num-type">Bhagyank</div></div><div class="num-card"><div class="num-val" style="color:#10B981;">${n.naamank}</div><div class="num-type">Naam Ank</div></div><div class="num-card"><div class="num-val" style="color:#F97316;">${n.atmaank}</div><div class="num-type">Atma Ank</div></div><div class="num-card"><div class="num-val" style="color:#EC4899;">${n.vyaktiank}</div><div class="num-type">Vyakti Ank</div></div><div class="num-card"><div class="num-val" style="color:#FFD700;">${n.karmaank}</div><div class="num-type">Karma Ank</div></div></div><div style="margin-top:15px;padding:15px;background:rgba(255,255,255,0.04);border-radius:10px;font-size:13px;color:#ccc;line-height:1.7;">${n.description}</div>`;}
+    }catch(e){el.innerHTML='<div style="color:#EF4444;padding:20px;">❌ Numerology load nahi hui.</div>';}
+  }
+  if(tab==='dasha'){
+    el.innerHTML='<div style="text-align:center;padding:20px;color:#B8A0FF;">⏳ Dasha calculate ho rahi hai...</div>';
+    try{
+      const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:500,system:'Aap Vedic Jyotish expert hain. Vimshottari Dasha calculate karo aur Hindi mein batao.',messages:[{role:'user',content:`Naam: ${name}, DOB: ${dob}, TOB: ${tob||'Unknown'}, POB: ${pob||'India'}. Current Mahadasha, Antardasha aur agle 3 Dashas batao.`}]})});
+      if(resp.ok){const d=await resp.json();const p=typeof d==='string'?JSON.parse(d):d;const analysis=p.content.map(c=>c.text||'').join('');
+      el.innerHTML=`<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.2);border-radius:12px;padding:20px;font-size:13px;color:#ccc;line-height:1.9;">${analysis.replace(/\n/g,'<br>')}</div>`;}
+    }catch(e){el.innerHTML='<div style="color:#EF4444;padding:20px;">❌ Dasha load nahi hui.</div>';}
+  }
+};
 window.generateKundali = generateKundali;
 window.sendMessage = sendMessage;
 window.sendQuickQ = sendQuickQ;
