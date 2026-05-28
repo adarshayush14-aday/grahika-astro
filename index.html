@@ -52,7 +52,7 @@ body {
   100%{background-position:200% center}
 }
 
-#app { position: relative; z-index: 1; min-height: 100vh; }
+#app { position: relative; z-index: 1; min-height: 100vh; padding-top: 0; }
 
 /* NAV */
 .nav {
@@ -1496,7 +1496,7 @@ if (proPages.includes(name) && plan === 'free') {
   document.getElementById('page-'+name).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('active')});
   document.querySelectorAll('.nav-btn').forEach(b=>{if(b.textContent.toLowerCase().includes(name.slice(0,3)))b.classList.add('active')});
-  setTimeout(()=>window.scrollTo(0,0),100);
+  window.scrollTo({top:0,behavior:'instant'});
 }
 
 // Kundali tabs
