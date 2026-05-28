@@ -1671,7 +1671,7 @@ async function showMatchResult(){
       const data=await resp.json();
       const parsed=typeof data==='string'?JSON.parse(data):data;
       const analysis=parsed.content.map(c=>c.text||'').join('');
-      result.innerHTML=`<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(16,185,129,0.3);border-radius:16px;padding:25px;animation:fadeUp 0.3s ease;"><div style="font-size:16px;font-weight:700;color:#FFD700;margin-bottom:15px;">💑 ${boy.name} & ${girl.name} — Kundali Milan Report</div><div style="font-size:13px;color:#ccc;line-height:1.9;">${analysis.replace(/\n/g,'<br>')}</div></div>`;
+      result.innerHTML=`<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(16,185,129,0.3);border-radius:16px;padding:25px;animation:fadeUp 0.3s ease;"><div style="font-size:16px;font-weight:700;color:#FFD700;margin-bottom:15px;">💑 ${boy.name} & ${girl.name} — Kundali Milan Report</div><div style="font-size:13px;color:#ccc;line-height:1.9;">${analysis.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/##\s(.*?)(<br>|$)/g,'<h3 style="color:#FFD700;font-family:Cinzel,serif;margin:12px 0 6px;">$1</h3>').replace(/---/g,'<hr style="border-color:rgba(255,215,0,0.2);margin:10px 0;">').replace(/\n/g,'<br>')}</div></div>`;
     }
   }catch(e){
     result.innerHTML='<div style="color:#EF4444;padding:20px;text-align:center;">❌ Milan nahi ho saka. Dobara try karein.</div>';
