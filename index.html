@@ -1117,27 +1117,10 @@ body {
     </div>
 
     <div class="kundali-chart">
-      <div style="margin-bottom:15px;color:#B8A0FF;font-size:13px;">Lagna Kundali — North Indian Style</div>
-      <div class="kundali-grid">
-        <div class="kundali-cell"><div class="house-num">12</div></div>
-        <div class="kundali-cell"><div class="house-num">1</div><span class="planet-badge">Su</span><span class="planet-badge">Me</span></div>
-        <div class="kundali-cell"><div class="house-num">2</div><span class="planet-badge">Ve</span></div>
-        <div class="kundali-cell"><div class="house-num">3</div></div>
-        <div class="kundali-cell"><div class="house-num">11</div><span class="planet-badge">Ke</span></div>
-        <div class="kundali-cell center">
-          <div style="font-size:22px;">🔮</div>
-          <div style="font-size:12px;color:#FFD700;">Grahika</div>
-          <div style="font-size:10px;color:#888;">Kundali</div>
-        </div>
-        <div class="kundali-cell"><div class="house-num">4</div><span class="planet-badge">Mo</span></div>
-        <div class="kundali-cell"><div class="house-num">10</div><span class="planet-badge">Sa</span></div>
-        <div class="kundali-cell"><div class="house-num">5</div></div>
-        <div class="kundali-cell"><div class="house-num">9</div><span class="planet-badge">Ra</span></div>
-        <div class="kundali-cell"><div class="house-num">8</div><span class="planet-badge">Ju</span></div>
-        <div class="kundali-cell"><div class="house-num">7</div></div>
-        <div class="kundali-cell"><div class="house-num">6</div><span class="planet-badge">Ma</span></div>
-      </div>
-    </div>
+     <div style="padding:30px;text-align:center;color:#888;">
+  <div style="font-size:48px;margin-bottom:15px;">🔮</div>
+  <div style="font-size:14px;color:#B8A0FF;">Home page pe apni birth details bharein<br>aur "Meri Kundali Banao" click karein</div>
+</div>
 
     <!-- Nav tabs -->
     <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
@@ -1577,7 +1560,7 @@ const rashifalData={};
    try{
      const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{
        method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:300,system:'Aap Vedic Astrology expert hain. Aaj ka rashifal Hindi mein 80 words mein batao. Emojis use karo.',messages:[{role:'user'content:`${window.currentRashifalPeriod === 'kal' ? 'Kal' : window.currentRashifalPeriod === 'hafte' ? 'Is hafte' : window.currentRashifalPeriod === 'maah' ? 'Is mahine' : window.currentRashifalPeriod === '2026' ? 'Saal 2026' : 'Aaj'} ke liye ${name} (${eng}) rashi ka rashifal batao. Date: ${new Date().toLocaleDateString('hi-IN')}`
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:300,system:`Aap Vedic Astrology expert hain. ${window.currentRashifalPeriod === 'kal' ? 'Kal ka' : window.currentRashifalPeriod === 'hafte' ? 'Is hafte ka' : window.currentRashifalPeriod === 'maah' ? 'Is mahine ka' : window.currentRashifalPeriod === '2026' ? 'Saal 2026 ka' : 'Aaj ka'} rashifal Hindi mein 80 words mein batao. Emojis use karo.`,messages:[{role:'user'content:`${window.currentRashifalPeriod === 'kal' ? 'Kal' : window.currentRashifalPeriod === 'hafte' ? 'Is hafte' : window.currentRashifalPeriod === 'maah' ? 'Is mahine' : window.currentRashifalPeriod === '2026' ? 'Saal 2026' : 'Aaj'} ke liye ${name} (${eng}) rashi ka rashifal batao. Date: ${new Date().toLocaleDateString('hi-IN')}`
      if(resp.ok){const data=await resp.json();const parsed=typeof data==='string'?
        JSON.parse(data):data;content=parsed.content.map(c=>c.text||'').join('');}
    }catch(e){content=rashifalData[rashi]||'Aaj ka din achha rahega! ⭐';}
