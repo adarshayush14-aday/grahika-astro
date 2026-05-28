@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.grahikaastro.app",
+        "sha256_cert_fingerprints": ["C1:5F:C1:94:E9:F6:BC:DB:B4:EE:44:AA:9C:5F:A1:B0:3C:FE:B6:18:79:1F:F1:F1:1F:72:DC:05:DF:58:DD:83"]
+      }
+    }]
