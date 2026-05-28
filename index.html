@@ -1280,11 +1280,11 @@ body {
       <div class="section-line"></div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:18px;">
-      <button class="btn-primary" style="padding:8px 18px;font-size:12px;animation:none;">Aaj</button>
-      <button class="btn-secondary" style="padding:8px 18px;font-size:12px;">Kal</button>
-      <button class="btn-secondary" style="padding:8px 18px;font-size:12px;">Is Hafte</button>
-      <button class="btn-secondary" style="padding:8px 18px;font-size:12px;">Is Maah</button>
-      <button class="btn-secondary" style="padding:8px 18px;font-size:12px;">2026</button>
+    <button class="btn-primary" style="padding:8px 18px;font-size:12px;animation:none;" onclick="setRashifalPeriod(this,'aaj')">Aaj</button>
+<button class="btn-secondary" style="padding:8px 18px;font-size:12px;" onclick="setRashifalPeriod(this,'kal')">Kal</button>
+<button class="btn-secondary" style="padding:8px 18px;font-size:12px;" onclick="setRashifalPeriod(this,'hafte')">Is Hafte</button>
+<button class="btn-secondary" style="padding:8px 18px;font-size:12px;" onclick="setRashifalPeriod(this,'maah')">Is Maah</button>
+<button class="btn-secondary" style="padding:8px 18px;font-size:12px;" onclick="setRashifalPeriod(this,'2026')">2026</button>
     </div>
     <div class="rashi-grid">
       <div class="rashi-card selected" onclick="showRashifal(this,'mesh')"><span class="rashi-sym">♈</span><div class="rashi-name">Mesh</div><div class="rashi-eng">Aries</div></div>
@@ -1510,8 +1510,12 @@ function showPage(name){
   const plan = window.currentUserPlan || 'free';
   const proPages = ['match'];
   const premiumPages = [];
-  if (proPages.includes(name) && plan === 'free') {
-    alert('⭐ Ye feature Pro plan mein available hai! Upgrade karein.');
+if (proPages.includes(name) && plan === 'free') {
+    const toast = document.getElementById('toast');
+    toast.style.background = 'linear-gradient(135deg, #7C3AED, #D946EF)';
+    toast.textContent = '⭐ Kundali Milan sirf Pro plan mein available hai! Neeche upgrade karein 👑';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
     showPage('subscription');
     return;
   }
@@ -1573,8 +1577,7 @@ const rashifalData={};
    try{
      const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{
        method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:300,system:'Aap Vedic Astrology expert hain. Aaj ka rashifal Hindi mein 80 words mein batao. Emojis use karo.',messages:[{role:'user',content:`Aaj ${new Date().toLocaleDateString('hi-IN')} ke liye ${name} (${eng}) rashi ka rashifal batao.`}]})  
-     });   
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:300,system:'Aap Vedic Astrology expert hain. Aaj ka rashifal Hindi mein 80 words mein batao. Emojis use karo.',messages:[{role:'user'content:`${window.currentRashifalPeriod === 'kal' ? 'Kal' : window.currentRashifalPeriod === 'hafte' ? 'Is hafte' : window.currentRashifalPeriod === 'maah' ? 'Is mahine' : window.currentRashifalPeriod === '2026' ? 'Saal 2026' : 'Aaj'} ke liye ${name} (${eng}) rashi ka rashifal batao. Date: ${new Date().toLocaleDateString('hi-IN')}`
      if(resp.ok){const data=await resp.json();const parsed=typeof data==='string'?
        JSON.parse(data):data;content=parsed.content.map(c=>c.text||'').join('');}
    }catch(e){content=rashifalData[rashi]||'Aaj ka din achha rahega! ⭐';}
@@ -2028,6 +2031,17 @@ window.startPayment = startPayment;
 window.closePayment = closePayment;
 window.selectPM = selectPM;
 window.processPayment = processPayment;
+ window.setRashifalPeriod = function(el, period) {
+  document.querySelectorAll('#page-horoscope .btn-primary, #page-horoscope .btn-secondary').forEach(b => {
+    b.className = 'btn-secondary';
+    b.style.cssText = 'padding:8px 18px;font-size:12px;';
+  });
+  el.className = 'btn-primary';
+  el.style.cssText = 'padding:8px 18px;font-size:12px;animation:none;';
+  window.currentRashifalPeriod = period;
+  const selected = document.querySelector('.rashi-card.selected');
+  if(selected) selected.click();
+}
   window.setActiveBottom = function(el){
   document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
