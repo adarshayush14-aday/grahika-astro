@@ -1,8 +1,10 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.grahikaastro.app",
-        "sha256_cert_fingerprints": ["1B:18:C4:75:6A:3A:1D:A0:23:0F:EA:DF:59:AA:C1:4D:32:CC:0A:08:5C:A8:2C:2A:B1:10:00:B9:1D:9B:0B:89"]
-      }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.grahikaastro.app",
+    "sha256_cert_fingerprints": [
+      "1B:18:C4:75:6A:3A:1D:A0:23:0F:EA:DF:59:AA:C1:4D:32:CC:0A:08:5C:A8:2C:2A:B1:10:00:B9:1D:9B:0B:89"
+    ]
+  }
+}]
