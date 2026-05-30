@@ -5,7 +5,7 @@
   "start_url": "/grahika-astro/",
   "scope": "/grahika-astro/",
   "id": "com.grahika.astro",
-  "display": "fullscreen",
+  "display": "Standalone",
   "orientation": "portrait",
   "background_color": "#0a0514",
   "theme_color": "#FFD700",
