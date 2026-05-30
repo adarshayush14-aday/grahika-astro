@@ -4,7 +4,7 @@
   "description": "AI powered Vedic astrology app - Kundali, Horoscope, Rashifal",
   "start_url": "/grahika-astro/",
   "scope": "/grahika-astro/",
-  "id": "com.grahika.astro",
+  "id": "com.grahikaastro.app",
   "display": "Standalone",
   "orientation": "portrait",
   "background_color": "#0a0514",
