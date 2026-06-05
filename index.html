@@ -1050,7 +1050,7 @@ overscroll-behavior: none;
     </div>
    <div class="panchang-grid" style="margin-bottom:25px;" id="panchangGrid">
      <iframe 
-  src="https://www.drikpanchang.com/panchang/day-panchang.html?lang=hi&geoname-id=1269750" 
+  src="https://www.drikpanchang.com/panchang/day-panchang.html?lang=hi" 
   width="100%" 
   height="450px" 
   style="border:none;border-radius:10px;">
@@ -2074,6 +2074,79 @@ window.processPayment = processPayment;
 const dobEl = document.getElementById('dob');
 if(dobEl) dobEl.value=today.toISOString().split('T')[0];
   // Auto load panchang on startup
+async function loadPanchang() {
+  const today = new Date();
+   let userCity = 'New Delhi';
+  try {
+    const locRes = await fetch('https://ipapi.co/json/');
+    const locData = await locRes.json();
+    userCity = locData.city || 'New Delhi';
+  } catch(e) { userCity = 'New Delhi'; }
+  const dateStr = today.toLocaleDateString('hi-IN', { 
+    weekday: 'long', year: 'numeric', 
+    month: 'long', day: 'numeric' 
+  });
+  
+  try {
+    const resp = await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 500,
+        system: `Aap Vedic Panchang expert hain. Sirf JSON format mein jawab dein, koi extra text nahi.`,
+        messages: [{
+          role: 'user',
+          content: `Aaj ki date hai: ${dateStr}. Location: ${userCity}, India. Sirf is exact JSON format mein jawab do: {"tithi":"naam","tithi_paksha":"Shukla/Krishna Paksha","nakshatra":"naam","nakshatra_desc":"Chandra Nakshatra","yoga":"naam","yoga_desc":"Shubh/Ashubh","karana":"naam","karana_desc":"description","sunrise":"HH:MM AM","sunset":"HH:MM PM","rahu_kaal":"HH:MM AM/PM – HH:MM AM/PM"}`
+        }]
+      })
+    });
+    
+    if(resp.ok) {
+      const data = await resp.json();
+      const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+      const text = parsed.content.map(c => c.text || '').join('');
+      const clean = text.replace(/```json|```/g, '').trim();
+      const p = JSON.parse(clean);
+      
+      document.getElementById('panchangGrid').innerHTML = `
+        <div class="panchang-item">
+          <div class="p-label">Tithi</div>
+          <div class="p-value">${p.tithi}</div>
+          <div class="p-sub">${p.tithi_paksha}</div>
+        </div>
+        <div class="panchang-item">
+          <div class="p-label">Nakshatra</div>
+          <div class="p-value">${p.nakshatra}</div>
+          <div class="p-sub">${p.nakshatra_desc}</div>
+        </div>
+        <div class="panchang-item">
+          <div class="p-label">Yoga</div>
+          <div class="p-value">${p.yoga}</div>
+          <div class="p-sub">${p.yoga_desc}</div>
+        </div>
+        <div class="panchang-item">
+  <div class="p-label">Karana</div>
+  <div class="p-value">${p.karana}</div>
+  <div class="p-sub">${p.karana_desc}</div>
+</div>
+<div class="panchang-item">
+  <div class="p-label">Sunrise / Sunset</div>
+  <div class="p-value">${p.sunrise} / ${p.sunset}</div>
+  <div class="p-sub">IST, ${userCity}</div>
+</div>
+        <div class="panchang-item">
+          <div class="p-label">Rahu Kaal</div>
+          <div class="p-value" style="color:#EF4444;">${p.rahu_kaal}</div>
+          <div class="p-sub">⚠️ Avoid Shubh Karya</div>
+        </div>
+      `;
+    }
+  } catch(e) {
+    console.log('Panchang load error:', e);
+  }
+}
+loadPanchang();
   showRashifal(document.querySelector('.rashi-card'), 'mesh');
 </script>
 </body>
