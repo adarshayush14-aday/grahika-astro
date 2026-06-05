@@ -2097,7 +2097,7 @@ async function loadPanchang() {
         system: `Aap Vedic Panchang expert hain. Sirf JSON format mein jawab dein, koi extra text nahi.`,
         messages: [{
           role: 'user',
-          content: `Aaj ki date hai: ${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}. Location: ${userCity}, India. Aaj ka sahi Vedic Panchang batao. Sirf is JSON format mein jawab do: {"tithi":"naam","tithi_paksha":"Shukla/Krishna Paksha","nakshatra":"naam","nakshatra_desc":"Chandra Nakshatra","yoga":"naam","yoga_desc":"Shubh/Ashubh","karana":"naam","karana_desc":"description","sunrise":"HH:MM AM","sunset":"HH:MM PM","rahu_kaal":"HH:MM AM/PM - HH:MM AM/PM"}`
+          content: `Aaj ki date hai: ${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}, Din: ${['Ravivar','Somvar','Mangalvar','Budhvar','Guruvar','Shukravar','Shanivar'][today.getDay()]}. Location: ${userCity}, India. Aaj ka BILKUL SAHI aur ACCURATE Vedic Panchang batao. Sirf is exact JSON format mein jawab do: {"tithi":"naam","tithi_paksha":"Shukla/Krishna Paksha","nakshatra":"naam","nakshatra_desc":"Chandra Nakshatra","yoga":"naam","yoga_desc":"Shubh/Ashubh","karana":"naam","karana_desc":"description","sunrise":"HH:MM AM","sunset":"HH:MM PM","rahu_kaal":"HH:MM AM/PM – HH:MM AM/PM"}` Location: ${userCity}, India. Sirf is exact JSON format mein jawab do: {"tithi":"naam","tithi_paksha":"Shukla/Krishna Paksha","nakshatra":"naam","nakshatra_desc":"Chandra Nakshatra","yoga":"naam","yoga_desc":"Shubh/Ashubh","karana":"naam","karana_desc":"description","sunrise":"HH:MM AM","sunset":"HH:MM PM","rahu_kaal":"HH:MM AM/PM – HH:MM AM/PM"}`
         }]
       })
     });
