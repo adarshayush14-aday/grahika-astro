@@ -6,7 +6,7 @@
 <title>Grahika Astro</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0514">
-<link rel="apple-touch-icon" href="grahika_logo_512.png"> 
+<link rel="apple-touch-icon" href="grahika_logo_512.png"> <meta name="color-scheme" content="dark"> 
 <link rel="icon" type="image/png" href="grahika_logo_512.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1049,11 +1049,12 @@ overscroll-behavior: none;
       <div class="section-line"></div>
     </div>
    <div class="panchang-grid" style="margin-bottom:25px;" id="panchangGrid">
-      <div class="panchang-item">
-        <div class="p-label">Tithi</div>
-        <div class="p-value">⏳ Load ho raha hai...</div>
-        <div class="p-sub">Aaj ka Panchang</div>
-      </div>
+     <iframe 
+  src="https://www.drikpanchang.com/panchang/day-panchang.html?lang=hi" 
+  width="100%" 
+  height="450px" 
+  style="border:none;border-radius:10px;">
+</iframe>
     </div>
 
     <!-- FEATURES -->
@@ -1480,7 +1481,7 @@ overscroll-behavior: none;
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithRedirect, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 // Stars
 const sc = document.getElementById('starsContainer');
@@ -1926,7 +1927,7 @@ async function doRegister(){
 // Google Login
 async function doGoogleLogin(){
   try {
-    await signInWithPopup(auth, googleProvider);
+    await signInWithRedirect(auth, googleProvider);
   } catch(e) {
     const err = document.getElementById('loginError');
     if(e.code !== 'auth/popup-closed-by-user'){
@@ -1939,7 +1940,7 @@ async function doGoogleLogin(){
 // GitHub Login
 async function doGithubLogin(){
   try {
-    await signInWithPopup(auth, githubProvider);
+    await signInWithRedirect(auth, githubProvider);
   } catch(e) {
     const err = document.getElementById('loginError');
     if(e.code !== 'auth/popup-closed-by-user'){
