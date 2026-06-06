@@ -2075,6 +2075,26 @@ if(dobEl) dobEl.value=today.toISOString().split('T')[0];
  async function loadPanchang() {
   try {
     const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const url = `https://www.prokerala.com/api/v2/astrology/panchang?ayanamsa=1&coordinates=28.6139,77.2090&datetime=${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}T00:00:00&timezone=Asia/Kolkata`;
+    const resp = await fetch(url);
+    if(resp.ok) {
+      const data = await resp.json();
+      const p = data.data;
+      document.getElementById('panchangGrid').innerHTML = `
+        <div class="panchang-item"><div class="p-label">Tithi</div><div class="p-value">${p.tithi[0]?.name||'N/A'}</div><div class="p-sub">${p.paksha?.name||''}</div></div>
+        <div class="panchang-item"><div class="p-label">Nakshatra</div><div class="p-value">${p.nakshatra[0]?.name||'N/A'}</div><div class="p-sub">Chandra Nakshatra</div></div>
+        <div class="panchang-item"><div class="p-label">Yoga</div><div class="p-value">${p.yoga[0]?.name||'N/A'}</div><div class="p-sub">${p.yoga[0]?.inauspicious?'Ashubh':'Shubh'}</div></div>
+        <div class="panchang-item"><div class="p-label">Karana</div><div class="p-value">${p.karana[0]?.name||'N/A'}</div><div class="p-sub">Aaj ka Karana</div></div>
+        <div class="panchang-item"><div class="p-label">Sunrise / Sunset</div><div class="p-value">${p.sunrise||'05:23 AM'} / ${p.sunset||'07:17 PM'}</div><div class="p-sub">IST, New Delhi</div></div>
+        <div class="panchang-item"><div class="p-label">Rahu Kaal</div><div class="p-value" style="color:#EF4444;">${p.rahukalam?.start||''} – ${p.rahukalam?.end||''}</div><div class="p-sub">⚠️ Avoid Shubh Karya</div></div>`;
+      return;
+    }
+  } catch(e) {}
+  try {
+    const today = new Date();
     const dd = today.getDate();
     const mm = today.getMonth()+1;
     const yyyy = today.getFullYear();
@@ -2085,19 +2105,16 @@ if(dobEl) dobEl.value=today.toISOString().split('T')[0];
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',
-        max_tokens: 600,
-        system: 'You are a Vedic Panchang calculator. Always respond with ONLY valid JSON, no extra text.',
-        messages: [{
-          role: 'user',
-          content: `Calculate exact Vedic Panchang for ${dd}/${mm}/${yyyy}, ${day}, New Delhi, India. Return ONLY this JSON: {"tithi":"exact tithi name in Hindi","tithi_paksha":"Shukla Paksha or Krishna Paksha","nakshatra":"nakshatra name in Hindi","nakshatra_desc":"Chandra Nakshatra","yoga":"yoga name in Hindi","yoga_desc":"Shubh or Ashubh","karana":"karana name in Hindi","karana_desc":"short description","sunrise":"05:XX AM","sunset":"07:XX PM","rahu_kaal":"HH:MM AM - HH:MM PM"}`
-        }]
+        max_tokens: 400,
+        system: 'You are a Vedic Panchang expert. Return ONLY valid JSON, no extra text.',
+        messages: [{role:'user',content:`Exact Vedic Panchang for ${dd}/${mm}/${yyyy}, ${day}, New Delhi, India. JSON only: {"tithi":"name in Hindi","tithi_paksha":"Krishna/Shukla Paksha","nakshatra":"name in Hindi","nakshatra_desc":"Chandra Nakshatra","yoga":"name in Hindi","yoga_desc":"Shubh or Ashubh","karana":"name in Hindi","karana_desc":"short desc","sunrise":"05:XX AM","sunset":"07:XX PM","rahu_kaal":"HH:MM AM - HH:MM PM"}`}]
       })
     });
     if(resp.ok) {
       const data = await resp.json();
-      const parsed = typeof data === 'string' ? JSON.parse(data) : data;
-      const text = parsed.content.map(c => c.text || '').join('');
-      const clean = text.replace(/```json|```/g, '').trim();
+      const parsed = typeof data==='string'?JSON.parse(data):data;
+      const text = parsed.content.map(c=>c.text||'').join('');
+      const clean = text.replace(/```json|```/g,'').trim();
       const p = JSON.parse(clean);
       document.getElementById('panchangGrid').innerHTML = `
         <div class="panchang-item"><div class="p-label">Tithi</div><div class="p-value">${p.tithi}</div><div class="p-sub">${p.tithi_paksha}</div></div>
@@ -2107,9 +2124,9 @@ if(dobEl) dobEl.value=today.toISOString().split('T')[0];
         <div class="panchang-item"><div class="p-label">Sunrise / Sunset</div><div class="p-value">${p.sunrise} / ${p.sunset}</div><div class="p-sub">IST, New Delhi</div></div>
         <div class="panchang-item"><div class="p-label">Rahu Kaal</div><div class="p-value" style="color:#EF4444;">${p.rahu_kaal}</div><div class="p-sub">⚠️ Avoid Shubh Karya</div></div>`;
     }
-  } catch(e) { console.log('Panchang error:', e); }
+  } catch(e2) { console.log('Panchang error:',e2); }
 }
-loadPanchang(); 
+loadPanchang();
  showRashifal(document.querySelector('.rashi-card'), 'mesh');
 </script>
 </body>
