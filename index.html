@@ -2077,15 +2077,15 @@ if(dobEl) dobEl.value=today.toISOString().split('T')[0];
     const resp = await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev/panchang');
     if(resp.ok) {
       const data = await resp.json();
-      const p = data.data;
-      document.getElementById('panchangGrid').innerHTML = `
-        <div class="panchang-item"><div class="p-label">Tithi</div><div class="p-value">${p.tithi[0]?.name||'N/A'}</div><div class="p-sub">${p.paksha?.name||''}</div></div>
-        <div class="panchang-item"><div class="p-label">Nakshatra</div><div class="p-value">${p.nakshatra[0]?.name||'N/A'}</div><div class="p-sub">Chandra Nakshatra</div></div>
-        <div class="panchang-item"><div class="p-label">Yoga</div><div class="p-value">${p.yoga[0]?.name||'N/A'}</div><div class="p-sub">${p.yoga[0]?.inauspicious?'Ashubh':'Shubh'}</div></div>
-        <div class="panchang-item"><div class="p-label">Karana</div><div class="p-value">${p.karana[0]?.name||'N/A'}</div><div class="p-sub">Aaj ka Karana</div></div>
-        <div class="panchang-item"><div class="p-label">Sunrise / Sunset</div><div class="p-value">${p.sunrise||'05:23 AM'} / ${p.sunset||'07:17 PM'}</div><div class="p-sub">IST, New Delhi</div></div>
-        <div class="panchang-item"><div class="p-label">Rahu Kaal</div><div class="p-value" style="color:#EF4444;">${p.rahukalam?.start||''} – ${p.rahukalam?.end||''}</div><div class="p-sub">⚠️ Avoid Shubh Karya</div></div>`;
-      return;
+     const p = data;
+document.getElementById('panchangGrid').innerHTML = `
+  <div class="panchang-item"><div class="p-label">Tithi</div><div class="p-value">${p.tithi||'N/A'}</div><div class="p-sub">${p.tithi_paksha||''}</div></div>
+  <div class="panchang-item"><div class="p-label">Nakshatra</div><div class="p-value">${p.nakshatra||'N/A'}</div><div class="p-sub">${p.nakshatra_desc||''}</div></div>
+  <div class="panchang-item"><div class="p-label">Yoga</div><div class="p-value">${p.yoga||'N/A'}</div><div class="p-sub">${p.yoga_desc||''}</div></div>
+  <div class="panchang-item"><div class="p-label">Karana</div><div class="p-value">${p.karana||'N/A'}</div><div class="p-sub">${p.karana_desc||''}</div></div>
+  <div class="panchang-item"><div class="p-label">Sunrise / Sunset</div><div class="p-value">${p.sunrise||''} / ${p.sunset||''}</div><div class="p-sub">IST, New Delhi</div></div>
+  <div class="panchang-item"><div class="p-label">Rahu Kaal</div><div class="p-value" style="color:#EF4444;">${p.rahu_kaal||''}</div><div class="p-sub">⚠️ Avoid Shubh Karya</div></div>`;
+return;
     }
   } catch(e) {}
   document.getElementById('panchangGrid').innerHTML = `
