@@ -2104,6 +2104,29 @@ async function loadPanchang() {
   } catch(e) { console.log('Panchang error:',e); }
 }
 loadPanchang();
+ async function handlePaymentReturn() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const orderId = urlParams.get('order_id');
+  const planParam = urlParams.get('plan');
+  const uid = urlParams.get('uid');
+  if(orderId && planParam) {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    const user = auth.currentUser;
+    const userId = user?.uid || uid;
+    if(userId) {
+      const planName = planParam.toLowerCase().includes('premium') ? 'premium' : 'pro';
+      await saveUserPlan(userId, planName);
+      updatePlanUI(planName);
+      const t = document.getElementById('toast');
+      t.style.background = 'linear-gradient(135deg, #10B981, #06B6D4)';
+      t.textContent = `🎉 ${planParam} Plan activate ho gaya! Welcome to Premium! 👑`;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 5000);
+      window.history.replaceState({}, document.title, '/');
+    }
+  }
+}
+handlePaymentReturn();
  showRashifal(document.querySelector('.rashi-card'), 'mesh');
 </script>
 </body>
