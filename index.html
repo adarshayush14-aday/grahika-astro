@@ -1531,10 +1531,10 @@ async function generateKundali(){
   showPage('kundali');
   document.querySelector('.kundali-chart').innerHTML=`<div style="text-align:center;padding:40px;color:#B8A0FF;">🔮 ${name} ji ki Kundali ban rahi hai...<br><br><div class="loading"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div></div>`;
   try{
-   const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{
+    const resp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:800,
-      system:'Aap Vedic Jyotish expert hain. Birth details se Kundali analysis karo. Hindi mein jawab do. Lagna, planets, aur 3 predictions batao.',
+      system:'Aap Vedic Jyotish expert hain. Birth details se Kundali analysis karo. Hindi mein jawab do.',
       messages:[{role:'user',content:`Naam: ${name}, Janm Tithi: ${dob}, Samay: ${tob||'Anjaan'}, Sthan: ${pob||'India'}. Kundali analysis karo.`}]})
     });
     if(resp.ok){
@@ -1549,8 +1549,36 @@ async function generateKundali(){
   }catch(e){
     document.querySelector('.kundali-chart').innerHTML=`<div style="text-align:center;padding:20px;color:#EF4444;">❌ Kundali load nahi hui. Dobara try karein.</div>`;
   }
+  try{
+    const planetResp=await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,
+      system:'Aap Vedic Jyotish expert hain. Sirf JSON mein jawab do.',
+      messages:[{role:'user',content:`DOB: ${dob}, TOB: ${tob||'12:00'}, POB: ${pob||'New Delhi'}. Return ONLY this JSON: {"lagna":"Rashi name","planets":[{"name":"Surya","symbol":"☉","rashi":"rashi name","degree":"XX°XX'"},{"name":"Chandra","symbol":"☽","rashi":"rashi name","degree":"XX°XX'"},{"name":"Mangal","symbol":"♂","rashi":"rashi name","degree":"XX°XX'"},{"name":"Budh","symbol":"☿","rashi":"rashi name","degree":"XX°XX'"},{"name":"Guru","symbol":"♃","rashi":"rashi name","degree":"XX°XX'"},{"name":"Shukra","symbol":"♀","rashi":"rashi name","degree":"XX°XX'"},{"name":"Shani","symbol":"♄","rashi":"rashi name","degree":"XX°XX'"},{"name":"Rahu","symbol":"☊","rashi":"rashi name","degree":"XX°XX'"},{"name":"Ketu","symbol":"☋","rashi":"rashi name","degree":"XX°XX'"}]}`}]})
+    });
+    if(planetResp.ok){
+      const pData=await planetResp.json();
+      const pp=typeof pData==='string'?JSON.parse(pData):pData;
+      const pText=pp.content.map(c=>c.text||'').join('');
+      const pClean=pText.replace(/```json|```/g,'').trim();
+      const planets=JSON.parse(pClean);
+      const pList=Array.isArray(planets.planets)?planets.planets:Array.isArray(planets)?planets:[];
+      let planetsHTML='<div class="planets-grid">';
+      pList.forEach(p=>{
+        planetsHTML+=`<div class="planet-row"><div class="planet-sym">${p.symbol}</div><div class="planet-info"><div class="planet-name">${p.name}</div><div class="planet-rashi">${p.rashi}</div></div><div class="planet-deg">${p.degree}</div></div>`;
+      });
+      planetsHTML+='</div>';
+      document.getElementById('planetsData').innerHTML=planetsHTML;
+      window.lastKundaliData={name,dob,tob,pob};
+    }
+  }catch(e){console.log('Planets error:',e);}
 }
-
+      window.lastKundaliData = {name, dob, tob, pob};
+    }
+  }catch(e){
+    console.log('Planets load error:', e);
+  }
+}
  // Planets bhi AI se generate karo
 const planetResp = await fetch('https://grahika-astro-api.adarsh-ayush14.workers.dev', {
   method: 'POST',
@@ -2059,8 +2087,6 @@ window.showForgot = showForgot;
 window.doLogin = doLogin;
 window.doRegister = doRegister;
 window.doGoogleLogin = doGoogleLogin;
- window.doGoogleLogin = doGoogleLogin;
-window.doGithubLogin = doGithubLogin;
 window.doGithubLogin = doGithubLogin;
 window.doForgot = doForgot;
 window.doLogout = doLogout;
