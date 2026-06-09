@@ -1586,7 +1586,7 @@ if(planetResp.ok) {
   const planets = JSON.parse(pClean);
   
   let planetsHTML = '<div class="planets-grid">';
-  planets.planets.forEach(p => {
+  (planets.planets || planets).forEach(p => {
     planetsHTML += `
       <div class="planet-row">
         <div class="planet-sym">${p.symbol}</div>
@@ -2059,6 +2059,8 @@ window.showForgot = showForgot;
 window.doLogin = doLogin;
 window.doRegister = doRegister;
 window.doGoogleLogin = doGoogleLogin;
+ window.doGoogleLogin = doGoogleLogin;
+window.doGithubLogin = doGithubLogin;
 window.doGithubLogin = doGithubLogin;
 window.doForgot = doForgot;
 window.doLogout = doLogout;
