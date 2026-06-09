@@ -1512,6 +1512,39 @@ if (proPages.includes(name) && plan === 'free') {
 
 // Kundali tabs
 function showKTab(tab){
+  const plan = window.currentUserPlan || 'free';
+  const proTabs = ['dasha', 'numerology'];
+  const premiumTabs = ['tarot', 'gems'];
+
+  if(proTabs.includes(tab) && plan === 'free') {
+    const toast = document.getElementById('toast');
+    toast.style.background = 'linear-gradient(135deg, #7C3AED, #D946EF)';
+    toast.textContent = '⭐ Ye feature sirf Pro plan mein available hai! Upgrade karein 👑';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
+    showPage('subscription');
+    return;
+  }
+
+  if(premiumTabs.includes(tab) && plan !== 'premium') {
+    const toast = document.getElementById('toast');
+    toast.style.background = 'linear-gradient(135deg, #FFD700, #F97316)';
+    toast.textContent = '💎 Ye feature sirf Premium plan mein available hai! Upgrade karein 👑';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
+    showPage('subscription');
+    return;
+  }
+
+  if(tab==='planets'&&window.lastKundaliData){
+    loadKundaliTab(tab,window.lastKundaliData);
+    return;
+  }
+  ['planets','dasha','numerology','tarot','gems'].forEach(t=>{
+    const el=document.getElementById('ktab-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+  });
+}
   if(tab==='planets'&&window.lastKundaliData){
     loadKundaliTab(tab,window.lastKundaliData);
     return;
