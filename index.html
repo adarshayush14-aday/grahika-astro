@@ -2,8 +2,15 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grahika Astro</title>
+ <meta name="description" content="Grahika Astro - AI-powered Vedic Astrology app. Janam Kundali, Daily Rashifal, Kundali Milan, Panchang aur bahut kuch. Grahika se powered.">
+<meta name="keywords" content="kundali, rashifal, astrology, jyotish, panchang, kundali milan, vedic astrology">
+<meta property="og:title" content="Grahika Astro - Aapka Cosmic Companion">
+<meta property="og:description" content="AI-powered Vedic Astrology - Kundali, Rashifal, Panchang aur zyada">
+<meta property="og:url" content="https://grahikaastro.online">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://grahikaastro.online">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0514">
 <link rel="apple-touch-icon" href="grahika_logo_512.png"> <meta name="color-scheme" content="dark"> 
@@ -1069,8 +1076,8 @@ overscroll-behavior: none;
       </div>
       <div class="feature-card orange" onclick="showPage('chat')">
         <span class="card-icon">🤖</span>
-        <div class="card-title">AI Astro Guru</div>
-        <div class="card-desc">Claude AI se seedha sawal karo apni Kundali, Dasha aur Bhavishya ke baare mein</div>
+        <div class="card-title">Jyotish Guru</div>
+        <div class="card-desc">Grahika se seedha sawal karo apni Kundali, Dasha aur Bhavishya ke baare mein</div>
       </div>
       <div class="feature-card teal" onclick="showPage('horoscope')">
         <span class="card-icon">🌙</span>
@@ -1217,8 +1224,8 @@ overscroll-behavior: none;
   <!-- AI CHAT PAGE -->
   <div class="page" id="page-chat">
     <div class="section-header">
-      <div class="section-title">🤖 AI Astro Guru</div>
-      <span class="badge badge-new">Claude AI</span>
+      <div class="section-title">🤖 Jyotish Guru</div>
+      <span class="badge badge-new">Grahika</span>
       <div class="section-line"></div>
     </div>
 
@@ -1227,7 +1234,7 @@ overscroll-behavior: none;
         <div class="ai-avatar">🔮</div>
         <div>
           <div style="font-weight:600;font-size:14px;">Grahika AI Guru</div>
-          <div style="font-size:11px;color:#B8A0FF;">Claude AI se Powered • 24/7 Available</div>
+          <div style="font-size:11px;color:#B8A0FF;">Grahika se Powered • 24/7 Available</div>
         </div>
         <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
           <div style="width:8px;height:8px;border-radius:50%;background:#10B981;"></div>
@@ -1243,7 +1250,7 @@ overscroll-behavior: none;
       </div>
       <div class="chat-messages" id="chatMessages">
         <div class="msg ai">
-          <div class="msg-bubble">🙏 Namaste! Main hoon Grahika AI Guru — Claude AI ki shakti se chalaya hua aapka astrological companion.<br><br>Aap mujhse apni Kundali, Rashifal, Dasha, Prem, Career, aur koi bhi jyotish sawal pooch sakte hain. Main poori mehnat se jawab dunga! ⭐</div>
+          <div class="msg-bubble">🙏 Namaste! Main hoon Grahika AI Guru — Grahika ki shakti se chalaya hua aapka astrological companion.<br><br>Aap mujhse apni Kundali, Rashifal, Dasha, Prem, Career, aur koi bhi jyotish sawal pooch sakte hain. Main poori mehnat se jawab dunga! ⭐</div>
           <div class="msg-time">Abhi</div>
         </div>
       </div>
@@ -1470,14 +1477,41 @@ overscroll-behavior: none;
   </div>
 </div>
 
-<div class="toast" id="toast">✅ Payment successful! Premium access activated!</div>
+<!-- FOOTER -->
+<div style="text-align:center;padding:30px 20px;border-top:1px solid rgba(255,215,0,0.1);margin-top:20px;font-size:12px;color:#666;">
+  <div style="margin-bottom:12px;">
+    <a href="/privacy.html" style="color:#B8A0FF;text-decoration:none;margin:0 12px;">Privacy Policy</a>
+    <a href="/terms.html" style="color:#B8A0FF;text-decoration:none;margin:0 12px;">Terms & Conditions</a>
+    <a href="mailto:support@grahikaastro.online" style="color:#B8A0FF;text-decoration:none;margin:0 12px;">Contact Us</a>
+  </div>
+  <div style="color:#555;">© 2025 Grahika Astro. All rights reserved.</div>
+  <div style="margin-top:8px;color:#555;font-size:11px;">Secured by Cashfree 🔒 • Powered by Grahika ⭐</div>
+</div>
+ <div class="toast" id="toast">✅ Payment successful! Premium access activated!</div>
 
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-// Stars
+
+// ===== REAL FIREBASE AUTH =====
+const firebaseConfig = {
+  apiKey: "AIzaSyA1h3qaBH8Rtl874xuWZMvp6DfAKHpaMYs",
+  authDomain: "grahika-astro.firebaseapp.com",
+  projectId: "grahika-astro",
+  storageBucket: "grahika-astro.firebasestorage.app",
+  messagingSenderId: "574643833340",
+  appId: "1:574643833340:web:4f778605f8d78747a2ca79"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+  const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider(); 
+ 
+ // Stars
 const sc = document.getElementById('starsContainer');
 for(let i=0;i<80;i++){
   const s=document.createElement('div');
@@ -1536,15 +1570,6 @@ function showKTab(tab){
     return;
   }
 
-  if(tab==='planets'&&window.lastKundaliData){
-    loadKundaliTab(tab,window.lastKundaliData);
-    return;
-  }
-  ['planets','dasha','numerology','tarot','gems'].forEach(t=>{
-    const el=document.getElementById('ktab-'+t);
-    if(el)el.style.display=t===tab?'block':'none';
-  });
-}
   if(tab==='planets'&&window.lastKundaliData){
     loadKundaliTab(tab,window.lastKundaliData);
     return;
@@ -1656,7 +1681,7 @@ await setDoc(countRef, { count: currentCount + 1, date: today }, { merge: true }
       body:JSON.stringify({
         model:'claude-sonnet-4-5',
         max_tokens:1000,
-        system:`Aap Grahika Astro ke AI Astrology Guru hain. Aap Claude AI se powered hain. Aap Hinglish (Hindi + English mix) mein jawab dete hain jaise ek dost deta hai. Aap Vedic Astrology, Kundali, Rashifal, Dasha, Numerology, Vastu, Tarot, aur sabhi jyotish vishay mein expert hain. Aap hamesha helpful, precise aur thoda mystical style mein baat karte hain. Har response mein emojis use karein. Max 150 words mein jawab dein. Disclaimer: "Yeh sirf jyotish drashti hai, professional advice nahi."`,
+        system:`Aap Grahika Astro ke AI Astrology Guru hain. Aap Grahika se powered hain. Aap Hinglish (Hindi + English mix) mein jawab dete hain jaise ek dost deta hai. Aap Vedic Astrology, Kundali, Rashifal, Dasha, Numerology, Vastu, Tarot, aur sabhi jyotish vishay mein expert hain. Aap hamesha helpful, precise aur thoda mystical style mein baat karte hain. Har response mein emojis use karein. Max 150 words mein jawab dein. Disclaimer: "Yeh sirf jyotish drashti hai, professional advice nahi."`,
         messages:chatHistory
       })
     });
@@ -1815,24 +1840,19 @@ function selectPM(el){
   }
   }
 
-// ===== REAL FIREBASE AUTH =====
-const firebaseConfig = {
-  apiKey: "AIzaSyA1h3qaBH8Rtl874xuWZMvp6DfAKHpaMYs",
-  authDomain: "grahika-astro.firebaseapp.com",
-  projectId: "grahika-astro",
-  storageBucket: "grahika-astro.firebasestorage.app",
-  messagingSenderId: "574643833340",
-  appId: "1:574643833340:web:4f778605f8d78747a2ca79"
-};
+// Mobile redirect result handle karo
+getRedirectResult(auth).then((result) => {
+  if (result && result.user) {
+    hideAuthOverlay();
+    updateNavUser(result.user);
+    loadUserPlan(result.user.uid);
+  }
+}).catch((e) => {
+  console.log('Redirect error:', e);
+});
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-  const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
-
-// Auth state observer
-onAuthStateChanged(auth, (user) => {
+ // Auth state observer
+ onAuthStateChanged(auth, (user) => {
   if (user) {
     hideAuthOverlay();
     updateNavUser(user);
@@ -1921,6 +1941,7 @@ async function doLogin(){
   const err=document.getElementById('loginError');
   clearErrors();
   if(!email||!pass){ err.textContent='📧 Email aur password dono zaroori hain!'; err.classList.add('show'); return; }
+  if(!auth){ err.textContent='⚠️ App load ho rahi hai, thodi der baad try karein.'; err.classList.add('show'); return; }
   try {
     const btn = document.querySelector('#loginForm .auth-btn-main');
     btn.textContent = '⏳ Login ho raha hai...'; btn.disabled = true;
@@ -1939,7 +1960,6 @@ async function doLogin(){
     err.classList.add('show');
   }
 }
-
 // Email Register
 async function doRegister(){
   const name=document.getElementById('regName').value.trim();
@@ -1950,6 +1970,7 @@ async function doRegister(){
   const suc=document.getElementById('registerSuccess');
   clearErrors();
   if(!name||!email||!pass||!confirm){ err.textContent='⚠️ Sabhi fields bharna zaroori hai!'; err.classList.add('show'); return; }
+  if(!auth){ err.textContent='⚠️ App load ho rahi hai, thodi der baad try karein.'; err.classList.add('show'); return; }
   if(pass.length<6){ err.textContent='🔒 Password kam se kam 6 characters ka hona chahiye!'; err.classList.add('show'); return; }
   if(pass!==confirm){ err.textContent='❌ Dono passwords match nahi kar rahe!'; err.classList.add('show'); return; }
   try {
@@ -2060,8 +2081,38 @@ window.switchAuthTab = switchAuthTab;
 window.showForgot = showForgot;
 window.doLogin = doLogin;
 window.doRegister = doRegister;
- window.doGoogleLogin = doGoogleLogin;
-window.doGithubLogin = doGithubLogin;
+ window.doGoogleLogin = async function(){
+  try {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile) {
+      await signInWithRedirect(auth, googleProvider);
+    } else {
+      await signInWithPopup(auth, googleProvider);
+    }
+  } catch(e) {
+    const err = document.getElementById('loginError');
+    if(e.code !== 'auth/popup-closed-by-user'){
+      err.textContent = '❌ Google login fail hua! Dobara try karein.';
+      err.classList.add('show');
+    }
+  }
+};
+window.doGithubLogin = async function(){
+  try {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile) {
+      await signInWithRedirect(auth, githubProvider);
+    } else {
+      await signInWithPopup(auth, githubProvider);
+    }
+  } catch(e) {
+    const err = document.getElementById('loginError');
+    if(e.code !== 'auth/popup-closed-by-user'){
+      err.textContent = '❌ GitHub login fail hua! Dobara try karein.';
+      err.classList.add('show');
+    }
+  }
+};
 window.doForgot = doForgot;
 window.doLogout = doLogout;
 window.toggleProfileDropdown = toggleProfileDropdown;
@@ -2160,7 +2211,7 @@ loadPanchang();
   }
 }
 handlePaymentReturn();
- showRashifal(document.querySelector('.rashi-card'), 'mesh');
+ setTimeout(() => { showRashifal(document.querySelector('.rashi-card'), 'mesh'); }, 1500);
 </script>
 </body>
 </html>
